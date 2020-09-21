@@ -22,6 +22,7 @@ try {
                 if (!session_id())
                     session_start();
                 $_SESSION['logon'] = true;
+                $_SESSION['id'] = $row['id'];
                 // Close the connection with the database
                 $file_db = null;
                 // Go to the inbox
@@ -43,5 +44,5 @@ catch(PDOException $e) {
     <input type="text" id="username" name="username"><br><br>
     <label for="pass">Password:</label>
     <input type="text" id="pass" name="pass"><br><br>
-    <input type="submit" value="Submit">
+    <input type="submit" value="Login">
 </form>

@@ -55,7 +55,7 @@ catch(PDOException $e) {
                      <th>
                         <span class="actions">
                             <a href="reply.php?id={$msg['id']}"><span class="material-icons">reply</span></a>
-                            <a href="delete.php?id={$msg['id']}"><span class="material-icons">delete</span></a>
+                            <a href="details.php?id={$msg['id']}&deleteForm=y"><span class="material-icons">delete</span></a>
                             <a href="details.php?id={$msg['id']}"><span class="material-icons">launch</span></a>
                         </span>
                     </th>
@@ -65,4 +65,7 @@ EOT;
     ?>
     </tbody>
 </table>
+<form action="/message.php">
+    <button type="submit">New message</button>
+</form>
 
