@@ -47,14 +47,17 @@ catch(PDOException $e) {
     <tbody>
     <?php
         foreach($messages as $msg) {
+            $stmt = $file_db->prepare("SELECT * FROM Users WHERE id=:id");
+            $stmt->execute(['id' => $msg['sender']]);
+            $user = $stmt->fetch();
             echo <<<EOT
                 <tr>
-                     <th>{$msg['time']}</th>
-                     <th>n/a</th>
-                     <th>{$msg['title']}</th>
+                     <th>{$msg['date']}</th>
+                     <th>{$user['username']}</th>
+                     <th>{$msg['subject']}</th>
                      <th>
                         <span class="actions">
-                            <a href="reply.php?id={$msg['id']}"><span class="material-icons">reply</span></a>
+                            <a href="message.php?id={$msg['id']}"><span class="material-icons">reply</span></a>
                             <a href="details.php?id={$msg['id']}&deleteForm=y"><span class="material-icons">delete</span></a>
                             <a href="details.php?id={$msg['id']}"><span class="material-icons">launch</span></a>
                         </span>

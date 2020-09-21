@@ -9,6 +9,16 @@ $file_db = new PDO('sqlite:/usr/share/nginx/databases/database.sqlite');
 $file_db->setAttribute(PDO::ATTR_ERRMODE,
     PDO::ERRMODE_EXCEPTION);
 
+if(isset($_GET['id'])){
+    // Search for the desired message
+    $stmt = $file_db->prepare("SELECT * FROM Messages WHERE id=:id");
+    $stmt->execute(['id' => $_GET['id']]);
+    $message = $stmt->fetch();
+    $stmt = $file_db->prepare("SELECT * FROM Users WHERE id=:id");
+    $stmt->execute(['id' => $message['recipient']]);
+    $user = $stmt->fetch();
+}
+
 // Check that the form is completed
 if (isset($_POST['recipient']) && isset($_POST['subject']) && isset($_POST['body'])) {
     $stmt = $file_db->prepare("SELECT * FROM Users WHERE id=:id");
@@ -43,9 +53,9 @@ if (isset($_POST['recipient']) && isset($_POST['subject']) && isset($_POST['body
 
 <form action="/message.php" method="post">
     <label for="recipient">Recipient:</label><br>
-    <input type="text" id="recipient" name="recipient"><br>
+    <input type="text" id="recipient" name="recipient" value="<?php echo $user['username'];?>"><br>
     <label for="subject">Subject:</label><br>
-    <input type="text" id="subject" name="subject"><br>
+    <input type="text" id="subject" name="subject" value="<?php if($message != NULL){echo "RE: ".$message['subject'];}?>"><br>
     <label for="body">Body:</label><br>
     <textarea rows = "5" cols = "60" name="body">Enter details here...</textarea><br>
     <button type="submit">Send</button>
