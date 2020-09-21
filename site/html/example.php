@@ -74,7 +74,7 @@
     **************************************/
  
     // Drop table messages from file db
-    $file_db->exec("DROP TABLE messages"); 
+    //$file_db->exec("DROP TABLE messages");
  
     /**************************************
     * Close db connections                *

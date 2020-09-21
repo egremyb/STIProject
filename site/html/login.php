@@ -1,15 +1,7 @@
-/**
-This is the page for the login of the application
-**/
-<?php
-// Set default timezone
-date_default_timezone_set('UTC');
 
+<?php
+/*Login page for the website*/
 try {
-    /**************************************
-     * Create databases and                *
-     * open connections                    *
-     **************************************/
 
     // Create (connect to) SQLite database in file
     $file_db = new PDO('sqlite:/usr/share/nginx/databases/database.sqlite');
@@ -17,26 +9,33 @@ try {
     $file_db->setAttribute(PDO::ATTR_ERRMODE,
                              PDO::ERRMODE_EXCEPTION);
 
-    $users =  $file_db->query('SELECT * FROM Users');
+    // Ask for the Users available in the database
+    $users = $file_db->query('SELECT * FROM Users');
+
+    // Check if the password is set and the username too
+    if (isset($_POST['pass']) && isset($_POST['username'])) {
+        // Check if the user sent by the form exists in the database
+        foreach($users as $row) {
+            var_dump($row);
+            if ($_POST['pass'] == $row['password'] && $_POST['username'] == $row['username']) {
+                // If the user isn't already logged a new session will start
+                if (!session_id())
+                    session_start();
+                $_SESSION['logon'] = true;
+                // Close the connection with the database
+                $file_db = null;
+                // Go to the inbox
+                header('Location: inbox.php');
+                die();
+            }
+        }
+    }
+    $file_db = null;
 }
 catch(PDOException $e) {
     // Print PDOException message
     echo $e->getMessage();
 }
-
-if (isset($_POST['pass']) && isset($_POST['username'])) {
-    foreach($users as $row) {
-        if ($_POST['pass'] == $row[`password`] && $_POST['username'] == $row[`username`]) {
-            if (!session_id())
-                session_start();
-            $_SESSION['logon'] = true;
-
-            header('Location: disucssion.php');
-            die();
-        }
-    }
-}
-
 ?>
 
 <form action="/login.php" method="post">
