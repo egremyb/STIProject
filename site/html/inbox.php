@@ -53,12 +53,12 @@ catch(PDOException $e) {
             echo <<<EOT
                 <tr>
                      <th>{$msg['date']}</th>
-                     <th>{$user['username']}</th>
+                     <th>{$msg['sender']}</th>
                      <th>{$msg['subject']}</th>
                      <th>
                         <span class="actions">
-                            <a href="message.php?id={$msg['id']}"><span class="material-icons">reply</span></a>
-                            <a href="details.php?id={$msg['id']}&deleteForm=y"><span class="material-icons">delete</span></a>
+                            <a href="reply.php?id={$msg['id']}"><span class="material-icons">reply</span></a>
+                            <a href="delete.php?id={$msg['id']}"><span class="material-icons">delete</span></a>
                             <a href="details.php?id={$msg['id']}"><span class="material-icons">launch</span></a>
                         </span>
                     </th>
