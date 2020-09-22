@@ -22,7 +22,7 @@ try {
     $file_db->setAttribute(PDO::ATTR_ERRMODE,
         PDO::ERRMODE_EXCEPTION);
 
-    $messages =  $file_db->query('SELECT * FROM messages');
+    $messages =  $file_db->query('SELECT m.id, m.date, u.username, m.subject FROM messages AS m INNER JOIN Users AS u ON m.sender == u.id');
 }
 catch(PDOException $e) {
     // Print PDOException message
@@ -47,13 +47,10 @@ catch(PDOException $e) {
     <tbody>
     <?php
         foreach($messages as $msg) {
-            $stmt = $file_db->prepare("SELECT * FROM Users WHERE id=:id");
-            $stmt->execute(['id' => $msg['sender']]);
-            $user = $stmt->fetch();
             echo <<<EOT
                 <tr>
                      <th>{$msg['date']}</th>
-                     <th>{$msg['sender']}</th>
+                     <th>{$msg['username']}</th>
                      <th>{$msg['subject']}</th>
                      <th>
                         <span class="actions">
