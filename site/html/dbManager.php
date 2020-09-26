@@ -25,6 +25,13 @@ class dbManager
     }
 
     /**
+     * @return PDOStatement object containing the roles available in the database
+     */
+    function findAllRoles() {
+        return $this->file_db->query("SELECT * FROM Roles");
+    }
+
+    /**
      * @param $id id of the message who must be found
      * @return false|PDOStatement boolean false it the message isn't found or a an object that represents the message required
      */
@@ -98,11 +105,100 @@ class dbManager
     }
 
     /**
+     * @return false|PDOStatement all the users in the database
+     */
+    function findAllUsers() {
+        return $this->file_db->query(
+            "SELECT username, isValid, Roles.name AS 'rolename' FROM Users 
+                  INNER JOIN Roles ON Users.role = Roles.id"
+        );
+    }
+
+    /**
+     * @param $id int id of the user to update
+     * @param $isValid boolean true if user is active
+     * @param $role int role of the user
+     */
+    function saveUserDetails($id, $isValid, $role){
+        $valid = $this->booleanToSQLite($isValid);
+
+        // Prepare the database request to update user details
+        $sql = "UPDATE Users SET isValid=:isValid, role=:role WHERE id=:id";
+        $stmt = $this->file_db->prepare($sql);
+        $stmt->bindParam(':isValid',$valid);
+        $stmt->bindParam(':role',$role, PDO::PARAM_INT);
+        $stmt->bindParam(':id',$id, PDO::PARAM_INT);
+        $stmt->execute();
+    }
+
+    /**
+     * @param $plaintextPassword string plaintext password to hash
+     * @return false|string|null hashed password
+     */
+    function hashPassword($plaintextPassword) {
+        return password_hash($plaintextPassword, PASSWORD_BCRYPT);
+    }
+
+    /**
+     * @param $id int id of the user to update
+     * @param $plaintextPassword string password of the user
+     */
+    function saveUserPassword($id, $plaintextPassword){
+        // Hash password with bcrypt & salt
+        $hash = $this->hashPassword($plaintextPassword);
+
+        // Prepare the database request to update user details
+        $sql = "UPDATE Users SET password=:password WHERE id=:id";
+        $stmt = $this->file_db->prepare($sql);
+        $stmt->bindParam(':password',$hash, PDO::PARAM_STR);
+        $stmt->bindParam(':id',$id, PDO::PARAM_INT);
+        $stmt->execute();
+    }
+
+    /**
+     * @param $username string username of the new user
+     * @param $plaintextPassword string plaintext password of the new user
+     * @param $isValid boolean validity of the account
+     * @param $role int role of the user
+     */
+    function addUser($username, $plaintextPassword, $isValid, $role){
+        $valid = $this->booleanToSQLite($isValid);
+
+        // Hash password with bcrypt & salt
+        $hash = $this->hashPassword($plaintextPassword);
+
+        // Prepare the database request to update user details
+        $sql = "INSERT INTO Users(username, password, isValid, role) VALUES (:username, :password, :isValid, :role)";
+        $stmt = $this->file_db->prepare($sql);
+        $stmt->bindParam(':username',$username);
+        $stmt->bindParam(':password',$hash);
+        $stmt->bindParam(':isValid',$valid);
+        $stmt->bindParam(':role',$role, PDO::PARAM_INT);
+        $stmt->execute();
+    }
+
+
+    /**
      * @param $id id of the message to delete in the DB
      */
     function deleteMessage($id){
         $stmt = $this->file_db->prepare("DELETE FROM Messages WHERE id=:id");
         $stmt->execute(['id' => $id]);
         $stmt->fetch();
+    }
+
+    /**
+     * @param $val boolean value to convert to SQLite string
+     */
+    function booleanToSQLite($val)
+    {
+        // SQLite uses 'yes' for boolean
+        if ($val === true)
+            return 'yes';
+        else if ($val === false)
+            return 'no';
+
+        echo 'throwing';
+        throw new InvalidArgumentException("val must be a boolean");
     }
 }
