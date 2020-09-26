@@ -1,25 +1,23 @@
 <?php
+require_once('dbManager.php');
 session_start();
 // If the user is not logged he will be redirected to the login page
 if(!$_SESSION['logon']){
     header('Location: login.php');
 }
-$file_db = new PDO('sqlite:/usr/share/nginx/databases/database.sqlite');
-// Set errormode to exceptions
-$file_db->setAttribute(PDO::ATTR_ERRMODE,
-    PDO::ERRMODE_EXCEPTION);
+$dbManager = new dbManager();
 
 // If the delete button has been clicked we delete the message from the database
 if (isset($_GET['btnDelete'])) {
-    $stmt = $file_db->prepare("DELETE FROM Messages WHERE id=:id");
-    $stmt->execute(['id' => $_GET['id']]);
-    $messageDeleted = $stmt->fetch();
+    $dbManager->deleteMessage($_GET['id']);
+    // When a messaged is deleted the user is send to the inbox
     header('Location: inbox.php');
 } else {
     // Search for the desired message
-    $stmt = $file_db->prepare("SELECT * FROM Messages WHERE id=:id");
-    $stmt->execute(['id' => $_GET['id']]);
-    $message = $stmt->fetch();
+    $message = $dbManager->findMessageByID($_GET['id']);
+    if($message == false){
+        header('Location: inbox.php');
+    }
 }
 ?>
 

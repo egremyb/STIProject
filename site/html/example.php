@@ -28,7 +28,12 @@
                     id INTEGER PRIMARY KEY, 
                     title TEXT, 
                     message TEXT, 
-                    time TEXT)"); 
+                    time TEXT)");
+      $file_db->exec("CREATE TABLE IF NOT EXISTS messages (
+                    id INTEGER PRIMARY KEY, 
+                    title TEXT, 
+                    message TEXT, 
+                    time TEXT)");
  
     /**************************************
     * Set initial data                    *

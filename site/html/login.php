@@ -1,37 +1,27 @@
-
 <?php
+require_once('dbManager.php');
 /*Login page for the website*/
 try {
-
-    // Create (connect to) SQLite database in file
-    $file_db = new PDO('sqlite:/usr/share/nginx/databases/database.sqlite');
-    // Set errormode to exceptions
-    $file_db->setAttribute(PDO::ATTR_ERRMODE,
-                             PDO::ERRMODE_EXCEPTION);
-
-    // Ask for the Users available in the database
-    $users = $file_db->query('SELECT * FROM Users');
+    $dbManager = new dbManager();
 
     // Check if the password is set and the username too
     if (isset($_POST['pass']) && isset($_POST['username'])) {
         // Check if the user sent by the form exists in the database
-        foreach($users as $row) {
-            var_dump($row);
-            if ($_POST['pass'] == $row['password'] && $_POST['username'] == $row['username']) {
-                // If the user isn't already logged a new session will start
-                if (!session_id())
-                    session_start();
-                $_SESSION['logon'] = true;
-                $_SESSION['id'] = $row['id'];
-                // Close the connection with the database
-                $file_db = null;
-                // Go to the inbox
-                header('Location: inbox.php');
-                die();
-            }
+        $user = $dbManager->findUserByUsernamePassword($_POST['username'], $_POST['pass']);
+        if($user != false) {
+            // If the user isn't already logged a new session will start
+            if (!session_id())
+                session_start();
+            $_SESSION['logon'] = true;
+            $_SESSION['id'] = $user['id'];
+            // Close the connection with the database
+            $dbManager->closeConnection();
+            // Go to the inbox
+            header('Location: inbox.php');
+            die();
         }
     }
-    $file_db = null;
+    $dbManager->closeConnection();
 }
 catch(PDOException $e) {
     // Print PDOException message

@@ -1,4 +1,5 @@
 <?php
+require_once('dbManager.php');
 session_start();
 // If the user is not logged he will be redirected to the login page
 if(!$_SESSION['logon']){
@@ -11,18 +12,9 @@ const ACTIONS = '<span class="actions">
                 </span>';
 
 try {
-    /**************************************
-     * Create databases and                *
-     * open connections                    *
-     **************************************/
+    $dbManager = new dbManager();
 
-    // Create (connect to) SQLite database in file
-    $file_db = new PDO('sqlite:/usr/share/nginx/databases/database.sqlite');
-    // Set errormode to exceptions
-    $file_db->setAttribute(PDO::ATTR_ERRMODE,
-        PDO::ERRMODE_EXCEPTION);
-
-    $messages =  $file_db->query('SELECT * FROM messages');
+    $messages = $dbManager->findAllMessages();
 }
 catch(PDOException $e) {
     // Print PDOException message
@@ -47,18 +39,15 @@ catch(PDOException $e) {
     <tbody>
     <?php
         foreach($messages as $msg) {
-            $stmt = $file_db->prepare("SELECT * FROM Users WHERE id=:id");
-            $stmt->execute(['id' => $msg['sender']]);
-            $user = $stmt->fetch();
             echo <<<EOT
                 <tr>
                      <th>{$msg['date']}</th>
-                     <th>{$user['username']}</th>
+                     <th>{$msg['username']}</th>
                      <th>{$msg['subject']}</th>
                      <th>
                         <span class="actions">
                             <a href="message.php?id={$msg['id']}"><span class="material-icons">reply</span></a>
-                            <a href="details.php?id={$msg['id']}&deleteForm=y"><span class="material-icons">delete</span></a>
+                            <a href="details.php?id={$msg['id']}&deleteForm=yes"><span class="material-icons">delete</span></a>
                             <a href="details.php?id={$msg['id']}"><span class="material-icons">launch</span></a>
                         </span>
                     </th>
