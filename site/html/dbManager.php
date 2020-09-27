@@ -97,7 +97,7 @@ class dbManager
      */
     function findAllUsers() {
         return $this->file_db->query(
-            "SELECT username, isValid, Roles.name AS 'rolename' FROM Users 
+            "SELECT Users.id, username, isValid, Roles.name AS 'rolename' FROM Users 
                   INNER JOIN Roles ON Users.role = Roles.id"
         );
     }
@@ -173,6 +173,15 @@ class dbManager
         $stmt = $this->file_db->prepare("DELETE FROM Messages WHERE id=:id");
         $stmt->execute(['id' => $id]);
         $stmt->fetch();
+    }
+
+    /**
+     * @param $id int id of the user to delete in the DB
+     */
+    function deleteUser($id){
+        $stmt = $this->file_db->prepare("DELETE FROM Users WHERE id=:id");
+        $stmt->bindParam(':id',$id, PDO::PARAM_INT);
+        $stmt->execute();
     }
 
     /**
