@@ -14,7 +14,7 @@ const ACTIONS = '<span class="actions">
 try {
     $dbManager = new dbManager();
 
-    $messages = $dbManager->findAllMessages();
+    $messages = $dbManager->findAllMessagesFor($_SESSION['id']);
 }
 catch(PDOException $e) {
     // Print PDOException message

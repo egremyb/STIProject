@@ -75,11 +75,18 @@ class dbManager
     }
 
     /**
-     * @return false|PDOStatement boolean false if the connection with the DB isn't set
+     * @param $userId int id of the user the messages are addressed to
+     * @return array boolean false if the connection with the DB isn't set
      *                            or an object that contains all the messages
      */
-    function findAllMessages(){
-        return $this->file_db->query('SELECT m.id, m.date, u.username, m.subject FROM messages AS m INNER JOIN Users AS u ON m.sender == u.id');
+    function findAllMessagesFor($userId){
+        $sql = 'SELECT m.id, m.date, u.username, m.subject FROM messages AS m
+                INNER JOIN Users AS u ON m.sender == u.id
+                WHERE m.recipient=:id';
+        $stmt = $this->file_db->prepare($sql);
+        $stmt->bindParam(':id',$userId);
+        $stmt->execute();
+        return $stmt->fetchAll();
     }
 
     /**
