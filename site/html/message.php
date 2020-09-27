@@ -23,6 +23,10 @@ if (isset($_POST['recipient']) && isset($_POST['subject']) && isset($_POST['body
         if($recipient != false){
             $dbManager->addMessage($_POST['subject'], $_POST['body'], $_SESSION['id'], $recipient['id']);
             header('Location: inbox.php');
+        } else {
+            echo '<script language="javascript">';
+            echo 'alert("User unknown please try another user")';
+            echo '</script>';
         }
     }
     else header('Location: login.php');
@@ -43,17 +47,20 @@ if (isset($_POST['recipient']) && isset($_POST['subject']) && isset($_POST['body
                 </div>
                 <div class="row align-items-center">
                     <div class="col mt-4">
-                        <input type="text" id="recipient" name="recipient" class="form-control" placeholder="Recipient" value="<?php if($message != NULL){ echo $user['username'];}?>">
+                        <label for="recipient">Recipient</label>
+                        <input type="text" id="recipient" name="recipient" class="form-control" placeholder="Recipient" value="<?php if($message != NULL){ echo $user['username'];} else if($_POST['recipient']){ echo $_POST['recipient'];}?>">
                     </div>
                 </div>
                 <div class="row align-items-center mt-4">
                     <div class="col">
-                        <input type="text" id="subject" name="subject" class="form-control" placeholder="Subject" value="<?php if($message != NULL){echo "RE: ".$message['subject'];}?>">
+                        <label for="subject">Subject</label>
+                        <input type="text" id="subject" name="subject" class="form-control" placeholder="Subject" value="<?php if($message != NULL){echo "RE: ".$message['subject'];} else if($_POST['recipient']){ echo $_POST['subject'];}?>">
                     </div>
                 </div>
                 <div class="row align-items-center mt-4">
                     <div class="col">
-                        <textarea rows = "5" cols = "60"  class="form-control" placeholder="Enter details here..." name="body"></textarea>
+                        <label for="body">Body</label>
+                        <textarea rows = "5" cols = "60"  class="form-control" placeholder="Enter details here..." name="body" ><?php if($_POST['body']){ echo $_POST['body'];}?></textarea>
                     </div>
                 </div>
 

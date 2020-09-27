@@ -63,18 +63,6 @@ class dbManager
     }
 
     /**
-     * @param $username username of the user who must be found
-     * @param $password password of the user who must be found
-     * @return false|PDOStatement boolean false if the user isn't found or an object that contain the user found
-     */
-    function findUserByUsernamePassword($username, $password){
-        $stmt = $this->file_db->query('SELECT * FROM Users WHERE username=:username AND password=:password');
-        $stmt->execute(['username' => $username]);
-        $stmt->execute(['password' => $password]);
-        return $stmt->fetch();
-    }
-
-    /**
      * @return false|PDOStatement boolean false if the connection with the DB isn't set
      *                            or an object that contains all the messages
      */
