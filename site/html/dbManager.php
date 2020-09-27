@@ -109,7 +109,7 @@ class dbManager
      */
     function findAllUsers() {
         return $this->file_db->query(
-            "SELECT username, isValid, Roles.name AS 'rolename' FROM Users 
+            "SELECT Users.id, username, isValid, Roles.name AS 'rolename' FROM Users 
                   INNER JOIN Roles ON Users.role = Roles.id"
         );
     }
