@@ -188,6 +188,15 @@ class dbManager
     }
 
     /**
+     * @param $id int id of the user to delete in the DB
+     */
+    function deleteUser($id){
+        $stmt = $this->file_db->prepare("DELETE FROM Users WHERE id=:id");
+        $stmt->bindParam(':id',$id, PDO::PARAM_INT);
+        $stmt->execute();
+    }
+
+    /**
      * @param $val boolean value to convert to SQLite string
      */
     function booleanToSQLite($val)
