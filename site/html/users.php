@@ -58,6 +58,7 @@ $users = $dbManager->findAllUsers();
                 <?php
                 //todo: Add message if $users is null or empty
                 foreach($users as $user) {
+                    var_dump($user);
                     echo <<<EOT
                         <tr>
                              <th>{$user['username']}</th>
@@ -75,9 +76,9 @@ EOT;
                 ?>
                 </tbody>
             </table>
-            <a href="addUser.php">Add user<span class="material-icons">launch</span></a>
         </div>
     </div>
+    <a href="addUser.php">Add user<span class="material-icons">launch</span></a>
 </div>
 
 

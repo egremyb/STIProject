@@ -58,7 +58,7 @@ $roles = $dbManager->findAllRoles();
                         <div class="row align-items-center">
                             <div class="col mt-4">
                                 <label for="password">Password</label>
-                                <input type="password" id="password" name="password" class="form-control" value="<?php if (!empty($password)) echo $password ?>" placeholder="&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;&#9679;">
+                                <input type="password" id="password" name="password" class="form-control" value="<?php if (!empty($password)) echo $password ?>" placeholder="Password">
                             </div>
                         </div>
                         <div class="row align-items-center mt-4">
