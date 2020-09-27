@@ -29,13 +29,13 @@ $users = $dbManager->findAllUsers();
                 <li class="nav-item">
                     <a class="nav-link" href="message.php">New Message</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Services</a>
-                </li>
                 <li class="nav-item active">
                     <a class="nav-link" href="#">User management
                     <span class="sr-only">(current)</span>
                     </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="logout.php">Logout</a>
                 </li>
             </ul>
         </div>
