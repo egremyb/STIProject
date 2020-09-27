@@ -63,6 +63,18 @@ class dbManager
     }
 
     /**
+     * @param $id int id of the role
+     */
+    function getRoleName($id){
+        $stmt = $this->file_db->query('SELECT name from Roles WHERE id=:id');
+        $stmt->bindParam(':id',$id, PDO::PARAM_INT);
+        $stmt->execute();
+
+        $role = $stmt->fetch();
+        return $role["name"];
+    }
+
+    /**
      * @return false|PDOStatement boolean false if the connection with the DB isn't set
      *                            or an object that contains all the messages
      */

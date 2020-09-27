@@ -15,6 +15,7 @@ try {
                     session_start();
                 $_SESSION['logon'] = true;
                 $_SESSION['id'] = $user['id'];
+                $_SESSION['role'] = $dbManager->getRoleName($user['role']);
                 // Close the connection with the database
                 $dbManager->closeConnection();
                 // Go to the inbox
