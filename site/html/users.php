@@ -8,7 +8,7 @@ if(!$_SESSION['logon']){
     header('Location: login.php');
 }
 
-if (!IdentityManagement::isPageAllowed("Administrator")) {
+if (!IdentityManagement::isPageAllowed($_SESSION['role'])) {
     header('Location: inbox.php');
 }
 
@@ -63,7 +63,6 @@ $users = $dbManager->findAllUsers();
                 <?php
                 //todo: Add message if $users is null or empty
                 foreach($users as $user) {
-                    var_dump($user);
                     echo <<<EOT
                         <tr>
                              <th>{$user['username']}</th>

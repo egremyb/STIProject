@@ -1,5 +1,6 @@
 <?php
 require_once('dbManager.php');
+require_once('identityManagement.php');
 
 session_start();
 // If the user is not logged he will be redirected to the login page
@@ -7,7 +8,9 @@ if(!$_SESSION['logon']){
     header('Location: login.php');
 }
 
-// todo: redirect user if not admin
+if (!IdentityManagement::isPageAllowed($_SESSION['role'])) {
+    header('Location: inbox.php');
+}
 
 if (isset($_POST['saveUser'])) {
     if (isset($_POST['id']) && isset($_POST['role'])) {
