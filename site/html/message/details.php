@@ -1,9 +1,9 @@
 <?php
-require_once('dbManager.php');
+require_once('../dbManager.php');
 session_start();
 // If the user is not logged he will be redirected to the login page
 if(!$_SESSION['logon']){
-    header('Location: login.php');
+    header('Location: ../login.php');
 }
 $dbManager = new dbManager();
 
@@ -11,19 +11,19 @@ $dbManager = new dbManager();
 if (isset($_GET['btnDelete'])) {
     $dbManager->deleteMessage($_GET['id']);
     // When a messaged is deleted the user is send to the inbox
-    //header('Location: inbox.php');
+        header('Location: ../inbox.php');
 } else {
     // Search for the desired message
     $message = $dbManager->findMessageByID($_GET['id']);
     if($message == false){
-        //header('Location: inbox.php');
+        header('Location: ../inbox.php');
     }
 }
 ?>
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-<link rel="stylesheet" href="css/signin.css">
+<link rel="stylesheet" href="../css/signin.css">
 <form action="details.php" method="get">
     <div class="container">
         <div class="row justify-content-center">
@@ -73,13 +73,13 @@ if (isset($_GET['btnDelete'])) {
                             echo <<<EOT
                                 
                                 <button type="submit" class="btn btn-primary mt-4" name="btnDelete" value="yes">Delete</button>
-                                <button type="submit" class="btn btn-secondary mt-4" formaction="/inbox.php">Cancel</button>
+                                <button type="submit" class="btn btn-secondary mt-4" formaction="../inbox.php">Cancel</button>
                                 <input type="hidden" name="id" value="{$message['id']}"/>
 EOT;
                         }
                         else {
                             echo <<<EOT
-                                <button type="submit" class="btn btn-primary mt-4" formaction="/inbox.php">Go to Inbox</button>
+                                <button type="submit" class="btn btn-primary mt-4" formaction="../inbox.php">Go to Inbox</button>
 EOT;
                         }
                         ?>

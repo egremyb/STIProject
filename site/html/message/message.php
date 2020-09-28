@@ -1,9 +1,9 @@
 <?php
-require_once('dbManager.php');
+require_once('../dbManager.php');
 session_start();
 // If the user is not logged he will be redirected to the login page
 if(!$_SESSION['logon']){
-    header('Location: login.php');
+    header('Location: ../login.php');
 }
 $dbManager = new dbManager;
 
@@ -22,7 +22,7 @@ if (isset($_POST['recipient']) && isset($_POST['subject']) && isset($_POST['body
         // Check if the recipient wrote in the form exists in the database. If the user is unknown the site will do nothing
         if($recipient != false){
             $dbManager->addMessage($_POST['subject'], $_POST['body'], $_SESSION['id'], $recipient['id']);
-            header('Location: inbox.php');
+            header('Location: ../inbox.php');
         } else {
             echo '<script language="javascript">';
             echo 'alert("User unknown please try another user")';
@@ -34,7 +34,7 @@ if (isset($_POST['recipient']) && isset($_POST['subject']) && isset($_POST['body
 ?>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-<link rel="stylesheet" href="css/signin.css">
+<link rel="stylesheet" href="../css/signin.css">
 <form action="message.php" method="post">
     <div class="container">
         <div class="row justify-content-center">
@@ -67,7 +67,7 @@ if (isset($_POST['recipient']) && isset($_POST['subject']) && isset($_POST['body
                 <div class="row justify-content-start mt-4">
                     <div class="col">
                         <button type="submit" class="btn btn-primary mt-4">Submit</button>
-                        <button type="submit" class="btn btn-secondary mt-4" formaction="/inbox.php">Cancel</button>
+                        <button type="submit" class="btn btn-secondary mt-4" formaction="../inbox.php">Cancel</button>
                     </div>
                 </div>
             </div>

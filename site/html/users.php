@@ -27,7 +27,7 @@ $users = $dbManager->findAllUsers();
                     <a class="nav-link" href="inbox.php">Inbox</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="message.php">New Message</a>
+                    <a class="nav-link" href="message/message.php">New Message</a>
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link" href="#">User management

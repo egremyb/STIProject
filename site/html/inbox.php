@@ -42,7 +42,7 @@ catch(PDOException $e) {
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="message.php">New Message</a>
+                    <a class="nav-link" href="message/message.php">New Message</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="users.php">User management</a>
