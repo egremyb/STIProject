@@ -8,13 +8,14 @@ try {
     if (isset($_POST['pass']) && isset($_POST['username'])) {
         // Check if the user sent by the form exists in the database
         $user = $dbManager->findUserByUsername($_POST['username']);
-        if($user != false){
+        if($user != false && $user['isValid'] === 'yes'){
             if(password_verify($_POST['pass'], $user['password'])){
                 // If the user isn't already logged a new session will start
                 if (!session_id())
                     session_start();
                 $_SESSION['logon'] = true;
                 $_SESSION['id'] = $user['id'];
+                $_SESSION['role'] = $dbManager->getRoleName($user['role']);
                 // Close the connection with the database
                 $dbManager->closeConnection();
                 // Go to the inbox

@@ -1,10 +1,15 @@
 <?php
 require_once('dbManager.php');
+require_once('identityManagement.php');
 
 session_start();
 // If the user is not logged he will be redirected to the login page
 if(!$_SESSION['logon']){
     header('Location: login.php');
+}
+
+if (!IdentityManagement::isPageAllowed($_SESSION['role'])) {
+    header('Location: inbox.php');
 }
 
 $dbManager = new dbManager();
@@ -58,7 +63,6 @@ $users = $dbManager->findAllUsers();
                 <?php
                 //todo: Add message if $users is null or empty
                 foreach($users as $user) {
-                    var_dump($user);
                     echo <<<EOT
                         <tr>
                              <th>{$user['username']}</th>
