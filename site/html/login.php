@@ -6,6 +6,9 @@ try {
 
     // Check if the password is set and the username too
     if (isset($_POST['pass']) && isset($_POST['username'])) {
+        // Invalid credentials by default
+        $error = "Invalid username / password";
+
         // Check if the user sent by the form exists in the database
         $user = $dbManager->findUserByUsername($_POST['username']);
         if($user != false && $user['isValid'] === 'yes'){
@@ -21,11 +24,8 @@ try {
                 // Go to the inbox
                 header('Location: inbox.php');
                 die();
-            } else {
-                $error = "Username / Password invalid";
             }
         }
-
     }
     $dbManager->closeConnection();
 }

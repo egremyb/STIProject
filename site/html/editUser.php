@@ -6,10 +6,12 @@ session_start();
 // If the user is not logged he will be redirected to the login page
 if(!$_SESSION['logon']){
     header('Location: login.php');
+    exit();
 }
 
 if (!IdentityManagement::isPageAllowed($_SESSION['role'])) {
     header('Location: inbox.php');
+    exit();
 }
 
 if (isset($_POST['saveUser'])) {
@@ -28,6 +30,7 @@ if (isset($_POST['saveUser'])) {
 
         //todo: better method ?
         header('Location: editUser.php?id=' . $_POST['id']);
+        exit();
     } else {
         // Invalid information passed to saveUser
         echo 'invalid';

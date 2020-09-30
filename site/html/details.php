@@ -4,6 +4,7 @@ session_start();
 // If the user is not logged he will be redirected to the login page
 if(!$_SESSION['logon']){
     header('Location: login.php');
+    exit();
 }
 $dbManager = new dbManager();
 
