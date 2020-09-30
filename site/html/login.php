@@ -21,6 +21,8 @@ try {
                 // Go to the inbox
                 header('Location: inbox.php');
                 die();
+            } else {
+                $error = "Username / Password invalid";
             }
         }
 
@@ -53,6 +55,11 @@ catch(PDOException $e) {
                     <div class="row">
                         <div class="col-md-9 col-lg-8 mx-auto">
                             <h3 class="login-heading mb-4">Welcome back!</h3>
+                            <?php
+                                if (isset($error) && !empty($error)) {
+                                    echo '<p class="error">' . $error . '</p>';
+                                }
+                            ?>
                             <form action="/login.php" method="post">
                                 <div class="form-label-group">
                                     <input type="text" id="username" name="username" class="form-control" placeholder="Username" required autofocus>
