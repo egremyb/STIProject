@@ -33,9 +33,11 @@ if (isset($_POST['saveUser'])) {
         exit();
     } else {
         // Invalid information passed to saveUser
-        echo 'invalid';
+        $error = 'Cannot edit user';
     }
-} else if (!isset($_GET['id'])) {
+}
+
+if (!isset($_GET['id'])) {
     die('Invalid arguments passed to the page');
 } else {
     $dbManager = new dbManager();
@@ -52,7 +54,7 @@ if (isset($_POST['saveUser'])) {
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     </head>
     <body>
-        <form action="editUser.php" method="post">
+        <form method="post">
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-12 col-md-8 col-lg-8 col-xl-6">
@@ -61,6 +63,15 @@ if (isset($_POST['saveUser'])) {
                                 <h1>Edit user information</h1>
                             </div>
                         </div>
+                        <?php
+                        if (isset($error) && !empty($error)) {
+                            echo '<div class="row">
+                                    <div class="col text-center">
+                                        <p class="error">' . $error . '
+                                    </div>
+                                 </div>';
+                        }
+                        ?>
                         <input type="hidden" readonly name="id" value="<?php echo $user['id'] ?>" />
                         <div class="row align-items-center">
                             <div class="col mt-4">
