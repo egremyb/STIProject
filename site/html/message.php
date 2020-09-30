@@ -26,9 +26,7 @@ if (isset($_POST['recipient']) && isset($_POST['subject']) && isset($_POST['body
             header('Location: inbox.php');
             exit();
         } else {
-            echo '<script language="javascript">';
-            echo 'alert("User unknown please try another user")';
-            echo '</script>';
+            $error = 'Cannot find recipient';
         }
     }
     else {
@@ -77,31 +75,36 @@ if (isset($_POST['recipient']) && isset($_POST['subject']) && isset($_POST['body
                     <div class="col text-center">
                         <h1>New Message</h1>
                         <p class="text-h3">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia. </p>
+                        <?php
+                        if (isset($error) && !empty($error)) {
+                            echo '<p class="error">' . $error . '</p>';
+                        }
+                        ?>
                     </div>
                 </div>
                 <div class="row align-items-center">
                     <div class="col mt-4">
                         <label for="recipient">Recipient</label>
-                        <input type="text" id="recipient" name="recipient" class="form-control" placeholder="Recipient" value="<?php if($message != NULL){ echo $user['username'];} else if($_POST['recipient']){ echo $_POST['recipient'];}?>">
+                        <input type="text" id="recipient" name="recipient" class="form-control" placeholder="Recipient" required value="<?php if($message != NULL){ echo $user['username'];} else if($_POST['recipient']){ echo $_POST['recipient'];}?>">
                     </div>
                 </div>
                 <div class="row align-items-center mt-4">
                     <div class="col">
                         <label for="subject">Subject</label>
-                        <input type="text" id="subject" name="subject" class="form-control" placeholder="Subject" value="<?php if($message != NULL){echo "RE: ".$message['subject'];} else if($_POST['recipient']){ echo $_POST['subject'];}?>">
+                        <input type="text" id="subject" name="subject" class="form-control" placeholder="Subject" required value="<?php if($message != NULL){echo "RE: ".$message['subject'];} else if($_POST['recipient']){ echo $_POST['subject'];}?>">
                     </div>
                 </div>
                 <div class="row align-items-center mt-4">
                     <div class="col">
                         <label for="body">Body</label>
-                        <textarea rows = "5" cols = "60"  class="form-control" placeholder="Enter details here..." name="body" ><?php if($_POST['body']){ echo $_POST['body'];}?></textarea>
+                        <textarea rows = "5" cols = "60"  class="form-control" placeholder="Enter details here..." name="body" required ><?php if($_POST['body']){ echo $_POST['body'];}?></textarea>
                     </div>
                 </div>
 
                 <div class="row justify-content-start mt-4">
                     <div class="col">
                         <button type="submit" class="btn btn-primary mt-4">Submit</button>
-                        <button type="submit" class="btn btn-secondary mt-4" formaction="/inbox.php">Cancel</button>
+                        <button type="submit" class="btn btn-secondary mt-4" formaction="/inbox.php" formnovalidate>Cancel</button>
                     </div>
                 </div>
             </div>
