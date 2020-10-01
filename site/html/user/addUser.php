@@ -1,15 +1,17 @@
 <?php
-require_once('dbManager.php');
-require_once('identityManagement.php');
+require_once('../class/dbManager.php');
+require_once('../class/identityManagement.php');
 
 session_start();
 // If the user is not logged he will be redirected to the login page
 if(!$_SESSION['logon']){
-    header('Location: login.php');
+    header('Location: ../login.php');
+    exit();
 }
 
 if (!IdentityManagement::isPageAllowed($_SESSION['role'])) {
-    header('Location: inbox.php');
+    header('Location: ../inbox.php');
+    exit();
 }
 
 $username = $_POST['username'];
@@ -25,7 +27,8 @@ if (isset($_POST['addUser'])) {
         $dbManager->addUser($username, $password, $isValid, $selectedRole);
 
         //todo: better method ?
-        header('Location: users.php');
+        header('Location: ../users.php');
+        exit();
     } else {
         // Invalid information passed to saveUser
         echo 'invalid';
@@ -35,12 +38,14 @@ if (isset($_POST['addUser'])) {
 $dbManager = new dbManager();
 $roles = $dbManager->findAllRoles();
 ?>
-
-<html>
+<!DOCTYPE html>
+<html lang="en">
     <head>
-        <title>Add user</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+        <meta charset="UTF-8">
+        <title>Add user</title>
     </head>
     <body>
         <form action="addUser.php" method="post">
@@ -92,7 +97,7 @@ $roles = $dbManager->findAllRoles();
                         <div class="row justify-content-start mt-4">
                             <div class="col">
                                 <button type="submit" name="addUser" class="btn btn-primary mt-4">Submit</button>
-                                <button type="submit" class="btn btn-secondary mt-4" formaction="/users.php">Cancel</button>
+                                <button type="submit" class="btn btn-secondary mt-4" formaction="../users.php">Cancel</button>
                             </div>
                         </div>
                     </div>

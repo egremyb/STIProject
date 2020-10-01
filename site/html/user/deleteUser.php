@@ -1,15 +1,17 @@
 <?php
-require_once('dbManager.php');
-require_once('identityManagement.php');
+require_once('../class/dbManager.php');
+require_once('../class/identityManagement.php');
 
 session_start();
 // If the user is not logged he will be redirected to the login page
 if(!$_SESSION['logon']){
-    header('Location: login.php');
+    header('Location: ../login.php');
+    exit();
 }
 
 if (!IdentityManagement::isPageAllowed($_SESSION['role'])) {
-    header('Location: inbox.php');
+    header('Location: ../inbox.php');
+    exit();
 }
 
 if (!isset($_GET['id']) or empty($_GET['id'])) {
@@ -18,4 +20,4 @@ if (!isset($_GET['id']) or empty($_GET['id'])) {
 
 $dbManager = new dbManager();
 $dbManager->deleteUser($_GET['id']);
-header('Location: users.php');
+header('Location: ../users.php');

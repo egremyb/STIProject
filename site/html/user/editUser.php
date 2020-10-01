@@ -1,15 +1,17 @@
 <?php
-require_once('dbManager.php');
-require_once('identityManagement.php');
+require_once('../class/dbManager.php');
+require_once('../class/identityManagement.php');
 
 session_start();
 // If the user is not logged he will be redirected to the login page
 if(!$_SESSION['logon']){
-    header('Location: login.php');
+    header('Location: ../login.php');
+    exit();
 }
 
 if (!IdentityManagement::isPageAllowed($_SESSION['role'])) {
-    header('Location: inbox.php');
+    header('Location: ../inbox.php');
+    exit();
 }
 
 if (isset($_POST['saveUser'])) {
@@ -28,11 +30,14 @@ if (isset($_POST['saveUser'])) {
 
         //todo: better method ?
         header('Location: editUser.php?id=' . $_POST['id']);
+        exit();
     } else {
         // Invalid information passed to saveUser
-        echo 'invalid';
+        $error = 'Cannot edit user';
     }
-} else if (!isset($_GET['id'])) {
+}
+
+if (!isset($_GET['id'])) {
     die('Invalid arguments passed to the page');
 } else {
     $dbManager = new dbManager();
@@ -41,15 +46,17 @@ if (isset($_POST['saveUser'])) {
     $roles = $dbManager->findAllRoles();
 }
 ?>
-
-<html>
+<!DOCTYPE html>
+<html lang="en">
     <head>
-        <title>Edit user</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+        <meta charset="UTF-8">
+        <title>Edit user</title>
     </head>
     <body>
-        <form action="editUser.php" method="post">
+        <form method="post">
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-12 col-md-8 col-lg-8 col-xl-6">
@@ -58,6 +65,15 @@ if (isset($_POST['saveUser'])) {
                                 <h1>Edit user information</h1>
                             </div>
                         </div>
+                        <?php
+                        if (isset($error) && !empty($error)) {
+                            echo '<div class="row">
+                                    <div class="col text-center">
+                                        <p class="error">' . $error . '
+                                    </div>
+                                 </div>';
+                        }
+                        ?>
                         <input type="hidden" readonly name="id" value="<?php echo $user['id'] ?>" />
                         <div class="row align-items-center">
                             <div class="col mt-4">
@@ -99,7 +115,7 @@ if (isset($_POST['saveUser'])) {
                         <div class="row justify-content-start mt-4">
                             <div class="col">
                                 <button type="submit" name="saveUser" class="btn btn-primary mt-4">Submit</button>
-                                <button type="submit" class="btn btn-secondary mt-4" formaction="/users.php">Cancel</button>
+                                <button type="submit" class="btn btn-secondary mt-4" formaction="../users.php">Cancel</button>
                             </div>
                         </div>
                     </div>
