@@ -1,0 +1,9 @@
+.error {
+    color: red;
+    text-align: center;
+}
+
+.message {
+    color: green;
+    text-align: center;
+}
