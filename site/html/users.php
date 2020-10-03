@@ -79,8 +79,8 @@ $users = $dbManager->findAllUsers();
                                      <th>{$user['rolename']}</th>
                                      <th>
                                         <span class="actions">
-                                            <a href="editUser.php?id={$user['id']}"><span class="material-icons">edit</span></a>
-                                            <a href="deleteUser.php?id={$user['id']}"><span class="material-icons">delete</span></a>
+                                            <a href="user/editUser.php?id={$user['id']}"><span class="material-icons">edit</span></a>
+                                            <a href="user/deleteUser.php?id={$user['id']}"><span class="material-icons">delete</span></a>
                                         </span>
                                     </th>
                                 </tr>
