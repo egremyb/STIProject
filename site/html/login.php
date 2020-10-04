@@ -60,7 +60,7 @@ catch(PDOException $e) {
                                             echo '<p class="error">' . $error . '</p>';
                                         }
                                     ?>
-                                    <form action="/login.php" method="post">
+                                    <form action="./login.php" method="post">
                                         <div class="form-label-group">
                                             <input type="text" id="username" name="username" class="form-control" placeholder="Username" required autofocus>
                                             <label for="username">Username</label>
