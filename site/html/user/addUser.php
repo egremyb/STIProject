@@ -31,7 +31,7 @@ if (isset($_POST['addUser'])) {
         exit();
     } else {
         // Invalid information passed to saveUser
-        echo 'invalid';
+        $error = 'Invalid information to create a user';
     }
 }
 
@@ -57,22 +57,31 @@ $roles = $dbManager->findAllRoles();
                                 <h1>Create a new user</h1>
                             </div>
                         </div>
+                        <?php
+                        if (isset($error) && !empty($error)) {
+                            echo '<div class="row">
+                                    <div class="col text-center">
+                                        <p class="error">' . $error . '
+                                    </div>
+                                 </div>';
+                        }
+                        ?>
                         <div class="row align-items-center">
                             <div class="col mt-4">
                                 <label for="username">Username</label>
-                                <input type="text" id="username" name="username" class="form-control" value="<?php if (!empty($username)) echo $username ?>" placeholder="Username">
+                                <input type="text" id="username" name="username" class="form-control" required value="<?php if (!empty($username)) echo $username ?>" placeholder="Username">
                             </div>
                         </div>
                         <div class="row align-items-center">
                             <div class="col mt-4">
                                 <label for="password">Password</label>
-                                <input type="password" id="password" name="password" class="form-control" value="<?php if (!empty($password)) echo $password ?>" placeholder="Password">
+                                <input type="password" id="password" name="password" class="form-control" required value="<?php if (!empty($password)) echo $password ?>" placeholder="Password">
                             </div>
                         </div>
                         <div class="row align-items-center mt-4">
                             <div class="col">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="isValid" name="isValid" <?php if ($isValid) echo 'checked'?> >
+                                    <input class="form-check-input" type="checkbox" id="isValid" name="isValid" required <?php if ($isValid) echo 'checked'?> >
                                     <label class="form-check-label" for="isValid">Enable account</label>
                                 </div>
                             </div>
@@ -80,7 +89,7 @@ $roles = $dbManager->findAllRoles();
                         <div class="row align-items-center mt-4">
                             <div class="col">
                                 <label for="role">Role</label>
-                                <select class="form-control" id="role" name="role">
+                                <select class="form-control" id="role" name="role" required>
                                     <?php
                                     foreach ($roles as $role) {
                                         $opt = '<option class="form-control" value="' . $role['id'] . '"';
@@ -97,7 +106,7 @@ $roles = $dbManager->findAllRoles();
                         <div class="row justify-content-start mt-4">
                             <div class="col">
                                 <button type="submit" name="addUser" class="btn btn-primary mt-4">Submit</button>
-                                <button type="submit" class="btn btn-secondary mt-4" formaction="../users.php">Cancel</button>
+                                <button type="submit" class="btn btn-secondary mt-4" formaction="../users.php" formnovalidate>Cancel</button>
                             </div>
                         </div>
                     </div>
