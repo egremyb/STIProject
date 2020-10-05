@@ -1,19 +1,37 @@
-Si vous utilisez l'image Docker proposée pour le cours, vous pouvez copier directement le repertoire "site" et son contenu (explications dans la donnée du projet).
+# STI Project 1
 
-Le repertoire "site" contient deux repertoires :
+## Table of Content
+- [Introduction](#Introduction)  
+- [Installation](#Installation)
 
-    - databases
-    - html
+## Introduction
 
-Le repertoire "databases" contient :
+As part of the STI course we were asked to create a website that will simulate an web email system using a database.
+ 
+In this site you have two different roles, Administrator and Collaborator.  
+If you are an Administrator, you will be able to manage the users of the site.
 
-    - database.sqlite : un fichier de base de données SQLite
+You cannot access the site if you are not logged in. If you try to access other pages you will be redirected in the login page
+ 
+Here are the functions once you signed in the site :
 
-Le repertoire "html" contient :
+- As a collaborator you can do :
+    - See the email sent to you with the following information : the date when the email was sent, the sender and the subject.
+    - Next to the information of the email you can choose if you want to delete it, see the details of it(See more information such as the sender and the body) or reply to it
+    - Write a new message by filling a form were you specify the sender the subject and the description.
+    - Change your password
+- As an Administrator you can do:
+    - Same actions as a collaborator
+    - Add, delete, update a user.
 
-    - exemple.php : un fichier php qui réalise des opérations basiques SQLite sur le fichier contenu dans le repertoire databases
-    - helloworld.php : un simple fichier hello world pour vous assurer que votre container Docker fonctionne correctement
-    - phpliteadmin.php : une interface d'administration pour la base de données SQLite qui se trouve dans le repertoire databases
+## Installation
 
-Le mot de passe pour phpliteadmin est "admin".
+Here is the explaination on how to install the site :
+
+1. Clone the project using the command git clone :  
+  `git clone git@github.com:Naludrag/STIProject.git`
+
+2. Run the script `run-docker.sh`. This script will build a docker image named `sti_project_naludrag` and will run it on the `8080` port of your localhost.
+
+
 

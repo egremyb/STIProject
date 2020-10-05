@@ -32,18 +32,22 @@ class dbManager
     }
 
     /**
-     * @param $id id of the message who must be found
-     * @return false|PDOStatement boolean false it the message isn't found or a an object that represents the message required
+     * @param $id int id of the message who must be found
+     * @return false|PDOStatement boolean false it the message isn't found or a an object that represents the message
+     * required with username for sender and recipient
      */
     function findMessageByID($id){
         // Search for the desired message
-        $stmt = $this->file_db->prepare("SELECT * FROM Messages WHERE id=:id");
+        $stmt = $this->file_db->prepare("SELECT m.id, m.date, m.subject, m.body, s.username as sender, r.username as recipient FROM messages AS m
+                INNER JOIN Users AS s ON m.sender == s.id
+                INNER JOIN Users AS r ON m.recipient == r.id
+                WHERE m.id=:id");
         $stmt->execute(['id' => $id]);
         return $stmt->fetch();
     }
 
     /**
-     * @param $id id of the user who must be found
+     * @param $id int id of the user who must be found
      * @return false|PDOStatement boolean false if the user isn't found or an object that contain the user found
      */
     function findUserByID($id){
@@ -53,7 +57,7 @@ class dbManager
     }
 
     /**
-     * @param $username username of the user who must be found
+     * @param $username String username of the user who must be found
      * @return false|PDOStatement boolean false if the user isn't found or an object that contain the user found
      */
     function findUserByUsername($username){
@@ -90,10 +94,10 @@ class dbManager
     }
 
     /**
-     * @param $subject subject of the message that as to be added
-     * @param $body body of the message
-     * @param $sender the sender of the message
-     * @param $recipient the recipient of the message
+     * @param $subject String subject of the message that as to be added
+     * @param $body String body of the message
+     * @param $sender int the sender of the message
+     * @param $recipient int the recipient of the message
      */
     function addMessage($subject, $body, $sender, $recipient){
         // Prepare the date in the right format to write in the database
@@ -186,7 +190,7 @@ class dbManager
 
 
     /**
-     * @param $id id of the message to delete in the DB
+     * @param $id int id of the message to delete in the DB
      */
     function deleteMessage($id){
         $stmt = $this->file_db->prepare("DELETE FROM Messages WHERE id=:id");

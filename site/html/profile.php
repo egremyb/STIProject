@@ -44,36 +44,7 @@ if (isset($_POST['savePassword'])) {
     <title>Profile</title>
 </head>
     <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light static-top mb-5 shadow">
-        <div class="container">
-            <a class="navbar-brand" href="#">Profile</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarResponsive">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="inbox.php">Inbox</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="message/message.php">New Message</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">User management</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link" href="profile.php">Profile
-                            <span class="sr-only">(current)</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="logout.php">Logout</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <?php require_once('fragments/NavBar.php')?>
 
     <form action="profile.php" method="post">
         <div class="container">

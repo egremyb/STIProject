@@ -16,8 +16,6 @@ catch(PDOException $e) {
     // Print PDOException message
     echo $e->getMessage();
 }
-
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,37 +27,7 @@ catch(PDOException $e) {
     <title>Inbox</title>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light static-top mb-5 shadow">
-        <div class="container">
-            <a class="navbar-brand" href="#">Inbox</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarResponsive">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="inbox.php">Inbox
-                            <span class="sr-only">(current)</span>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="message/message.php">New Message</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="users.php">User management</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="profile.php">Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="logout.php">Logout</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-
+    <?php require_once('fragments/NavBar.php')?>
     <!-- Page Content -->
     <div class="container">
         <div class="card border-0 shadow my-5">
@@ -83,9 +51,9 @@ catch(PDOException $e) {
                          <th>{$msg['subject']}</th>
                          <th>
                             <span class="actions">
-                                <a href="message.php?id={$msg['id']}"><span class="material-icons">reply</span></a>
-                                <a href="details.php?id={$msg['id']}&deleteForm=yes"><span class="material-icons">delete</span></a>
-                                <a href="details.php?id={$msg['id']}"><span class="material-icons">launch</span></a>
+                                <a href="../message/message.php?id={$msg['id']}"><span class="material-icons">reply</span></a>
+                                <a href="../message/details.php?id={$msg['id']}&deleteForm=yes"><span class="material-icons">delete</span></a>
+                                <a href="../message/details.php?id={$msg['id']}"><span class="material-icons">launch</span></a>
                             </span>
                         </th>
                     </tr>

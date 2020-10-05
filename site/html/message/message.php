@@ -43,6 +43,7 @@ if (isset($_POST['recipient']) && isset($_POST['subject']) && isset($_POST['body
         <title>New message</title>
     </head>
     <body>
+        <?php require_once('../fragments/NavBar.php');?>
         <form action="message.php" method="post">
             <div class="container">
                 <div class="row justify-content-center">
