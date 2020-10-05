@@ -15,7 +15,6 @@ if (isset($_GET['btnDelete'])) {
 } else {
     // Search for the desired message
     $message = $dbManager->findMessageByID($_GET['id']);
-    var_dump($message);
     if($message == false){
         header('Location: ../inbox.php');
     }

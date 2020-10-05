@@ -29,7 +29,7 @@ if (isset($_POST['recipient']) && isset($_POST['subject']) && isset($_POST['body
             echo '</script>';
         }
     }
-    else header('Location: login.php');
+    else header('Location: ../login.php');
 }
 ?>
 <!DOCTYPE html>
