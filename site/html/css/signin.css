@@ -25,11 +25,6 @@
     border-radius: 2rem;
 }
 
-.error {
-    color: red;
-    text-align: center;
-}
-
 .form-label-group {
     position: relative;
     margin-bottom: 1rem;
