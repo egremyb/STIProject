@@ -11,19 +11,23 @@ try {
 
         // Check if the user sent by the form exists in the database
         $user = $dbManager->findUserByUsername($_POST['username']);
-        if($user != false && $user['isValid'] === 'yes'){
+        if($user != false){
             if(password_verify($_POST['pass'], $user['password'])){
-                // If the user isn't already logged a new session will start
-                if (!session_id())
-                    session_start();
-                $_SESSION['logon'] = true;
-                $_SESSION['id'] = $user['id'];
-                $_SESSION['role'] = $dbManager->getRoleName($user['role']);
-                // Close the connection with the database
-                $dbManager->closeConnection();
-                // Go to the inbox
-                header('Location: inbox.php');
-                die();
+                if ($user['isValid'] !== 'yes') {
+                    $error = "Account is not active";
+                } else {
+                    // If the user isn't already logged a new session will start
+                    if (!session_id())
+                        session_start();
+                    $_SESSION['logon'] = true;
+                    $_SESSION['id'] = $user['id'];
+                    $_SESSION['role'] = $dbManager->getRoleName($user['role']);
+                    // Close the connection with the database
+                    $dbManager->closeConnection();
+                    // Go to the inbox
+                    header('Location: inbox.php');
+                    die();
+                }
             }
         }
     }
@@ -41,6 +45,7 @@ catch(PDOException $e) {
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <link rel="stylesheet" href="css/signin.css">
+        <link rel="stylesheet" href="css/common.css">
 
         <meta charset="UTF-8">
         <title>Login</title>
