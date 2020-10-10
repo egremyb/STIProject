@@ -10,7 +10,12 @@ $dbManager = new dbManager;
 // If an id is received it means that a reply is desired by the user
 if(isset($_GET['id'])){
     $message = $dbManager->findMessageByID($_GET['id']);
-    $user = $dbManager->findUserByID($message['recipient']);
+    $replyContent = "\n\n\n\n" .
+        "---------- Original message ----------\n" .
+        "From: ${message['sender']}\n" .
+        "Sent: ${message['date']}\n" .
+        "To: ${message['recipient']}\n" .
+        "Subject: ${message['subject']}\n" . $message['body'];
 }
 
 // Check that the form is completed
@@ -60,7 +65,7 @@ if (isset($_POST['recipient']) && isset($_POST['subject']) && isset($_POST['body
                         <div class="row align-items-center">
                             <div class="col mt-4">
                                 <label for="recipient">Recipient</label>
-                                <input type="text" id="recipient" name="recipient" class="form-control" placeholder="Recipient" required value="<?php if($message != NULL){ echo $user['username'];} else if($_POST['recipient']){ echo $_POST['recipient'];}?>">
+                                <input type="text" id="recipient" name="recipient" class="form-control" placeholder="Recipient" required value="<?php if($message != NULL){ echo $message['sender'];} else if($_POST['recipient']){ echo $_POST['recipient'];}?>">
                             </div>
                         </div>
                         <div class="row align-items-center mt-4">
@@ -72,7 +77,7 @@ if (isset($_POST['recipient']) && isset($_POST['subject']) && isset($_POST['body
                         <div class="row align-items-center mt-4">
                             <div class="col">
                                 <label for="body">Body</label>
-                                <textarea rows = "5" cols = "60"  class="form-control" placeholder="Enter details here..." name="body" required ><?php if($_POST['body']){ echo $_POST['body'];}?></textarea>
+                                <textarea rows = "8" cols = "60"  class="form-control" placeholder="Enter details here..." name="body" required ><?php if(isset($replyContent)){echo $replyContent; } else if($_POST['body']){ echo $_POST['body'];}?></textarea>
                             </div>
                         </div>
 
