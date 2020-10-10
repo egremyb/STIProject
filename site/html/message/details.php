@@ -38,7 +38,6 @@ if (isset($_GET['btnDelete'])) {
                         <div class="row">
                             <div class="col text-center">
                                 <h1>View Message</h1>
-                                <p class="text-h3">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia. </p>
                             </div>
                         </div>
                         <div class="row align-items-center">
