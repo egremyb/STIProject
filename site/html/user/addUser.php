@@ -23,12 +23,17 @@ if (isset($_POST['addUser'])) {
     if (!empty($username) && !empty($password) && !empty($selectedRole)) {
         // Save user details
         $dbManager = new dbManager();
-        //todo: password strength perhaps ?
-        $dbManager->addUser($username, $password, $isValid, $selectedRole);
+        $foundUser = $dbManager->findUserByUsername($username);
+        if ($foundUser) {
+            $error = "Username not available";
+        } else {
+            //todo: password strength perhaps ?
+            $dbManager->addUser($username, $password, $isValid, $selectedRole);
 
-        //todo: better method ?
-        header('Location: ../users.php');
-        exit();
+            //todo: better method ?
+            header('Location: ../users.php');
+            exit();
+        }
     } else {
         // Invalid information passed to saveUser
         $error = 'Invalid information to create a user';
@@ -43,6 +48,7 @@ $roles = $dbManager->findAllRoles();
     <head>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="../css/common.css">
 
         <meta charset="UTF-8">
         <title>Add user</title>
@@ -81,7 +87,7 @@ $roles = $dbManager->findAllRoles();
                         <div class="row align-items-center mt-4">
                             <div class="col">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="isValid" name="isValid" required <?php if ($isValid) echo 'checked'?> >
+                                    <input class="form-check-input" type="checkbox" id="isValid" name="isValid" <?php if ($isValid) echo 'checked'?> >
                                     <label class="form-check-label" for="isValid">Enable account</label>
                                 </div>
                             </div>
