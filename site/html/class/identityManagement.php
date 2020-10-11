@@ -27,4 +27,15 @@ class IdentityManagement
 
         return true;
     }
+
+    public static function isPasswordStrong($password) {
+        // Source: https://www.codexworld.com/how-to/validate-password-strength-in-php/
+        // Validate password strength
+        $uppercase = preg_match('@[A-Z]@', $password);
+        $lowercase = preg_match('@[a-z]@', $password);
+        $number = preg_match('@[0-9]@', $password);
+        $specialChars = preg_match('@[^\w]@', $password);
+
+        return $uppercase && $lowercase && $number && $specialChars && strlen($password) >= 8;
+    }
 }
