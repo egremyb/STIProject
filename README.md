@@ -8,24 +8,24 @@
 
 ## Introduction
 
-As part of the STI course we were asked to create a website that will simulate an web email system using a database.
- 
+As part of the STI course we were asked to create a website that will simulate a web email system using a database.
+
 In this site you have two different roles, Administrator and Collaborator.  
 If you are an Administrator, you will be able to manage the users of the site.
 
-You cannot access the site if you are not logged in. If you try to access other pages you will be redirected in the login page
- 
-Here are the functions once you signed in the site :
+You cannot access the site if you are not logged in. If you try to access other pages you will be redirected to the login page
 
-- As a collaborator you can do :
+Here are the available functions once you sign in to the site :
+
+- As a collaborator you can do:
     - See the email sent to you with the following information : the date when the email was sent, the sender and the subject.
-    - Next to the information of the email you can choose if you want to delete it, see the details of it(See more information such as the sender and the body) or reply to it
+    - Next to the information of the email you can choose if you want to delete it, see its details (See more information such as the sender and the body) or reply to it
     - Write a new message by filling a form were you specify the sender the subject and the description.
     - Change your password
 - As an Administrator you can do:
     - Same actions as a collaborator
     - Add, delete, update a user.
-    
+
 ## Structure
 
 Down below you will find the structure of the repository and an explanation for the folders.
@@ -53,7 +53,7 @@ Inside it you will see two folders :
 
  - `databases` : this is the folder containing the sqlite file that is the database used for the application.
  - `html` : this folder contains all the php files that form the website.
- 
+
 At the root of the folder `html`, you will find the pages that are shown in the navigation bar of the website.
 
 The folder `class`, inside `html`, contains all the classes used on the website.  
@@ -65,7 +65,7 @@ The folder `user` contains all the pages used to manage a user account(add/delet
 
 ## Installation
 
-Here is the explaination on how to install the site :
+Here is the explanation on how to install the site :
 
 1. Clone the project using the command git clone :  
   `git clone git@github.com:Naludrag/STIProject.git`
@@ -87,6 +87,15 @@ This page is pretty simple you have to enter your username password. If your use
 
 ### Inbox page
 
+Once we're logged in, we arrive on the inbox page. This page, displayed below, contains all of the received emails.
+
+![Inbox Page](./images/Inbox.png)
+
+For each email, the date it was sent, the sender and the subject are displayed. A user can do the following actions on an email, in the same order as the picture:
+- Respond to it
+- Delete it
+- Show its details
+
 
 ### New message page
 
@@ -96,14 +105,14 @@ Here is the result page :
 
 ![New Message Page](./images/NewMessage.PNG)
 
-This pages will ask to fill all the fields for a new message. The new message is sent only if the user indicated exists in the database and that all the fileds are filled. If not the page will show an error and the message will not be sent. 
+This pages will ask to fill all the fields for a new message. The new message is sent only if the user indicated exists in the database and that all the fileds are filled. If not the page will show an error and the message will not be sent.
 
 You have two buttons in the bottom of the pages that will allow you to submit the form(send the message) or cancel it and return to the inbox page.
 
 The second function allows a user to answer to an email. In this case the fields will be automatically filled.
 
-Here is an example : 
-![Response Page](./images/Response.PNG) 
+Here is an example :
+![Response Page](./images/Response.PNG)
 
 In the body you will find the original messages for the response. The subject will contain the string `RE:` that indicates that this is a response.  
 Obviously, if the user want to change the content of the fields he can.
@@ -112,12 +121,12 @@ Obviously, if the user want to change the content of the fields he can.
 
 As the previous page this pages will have two functions.
 
-The first function allows the user to view the details of a message. 
+The first function allows the user to view the details of a message.
 
 The form used in the page is similar to the form used in the new message page. This time the sender is shown and the date too.
 In this page the fields cannot be changed.
 
-Here is the page : 
+Here is the page :
 ![Details Page](./images/Details.PNG)
 
 In this page you will have a button that will allow you to return to the inbox or you can use the navigation bar to go somewhere else.
@@ -133,7 +142,32 @@ In this mode the page will have two buttons :
  - The cancel button will redirect you to the inbox
  - The delete button that will erase the message from the database
 
+### Profile page
+The profile page is used to change the password of the current user, it also displays the username and the role :
+![Profile Page](./images/Profile.png)
+
+### User management page
+This page can only be accessed by administrators:  
+![User management Page](./images/UserManagement.png)
+
+The page shows all the users in the database and displays the username, the account validity and the role.  
+Each user can be edited or deleted.
+
+It is also possible to create a new user with the "Add user" button.
+
+### User creation page
+This page can only be accessed by administrators:  
+![User creation Page](./images/UserCreation.png)
+
+On this page, we can create a new account by specifying the following information:
+- Username
+- Password
+- Whether the account is enabled or not
+- Role of the user (Administrator or Collaborator)
 
 
+### User edition page
+This page can only be accessed by administrators:  
+![User edition Page](./images/EditUser.png)
 
-
+On this page, we can edit a user account. It is possible to change the password, account validity and role. The username cannot be changed.
