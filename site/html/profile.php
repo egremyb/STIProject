@@ -15,27 +15,24 @@ try {
     // Find user in the database
     $user = $dbManager->findUserByID($_SESSION['id']);
 
-    // If form was submitted
+    // Check form was submitted
     if (isset($_POST['savePassword'])) {
-        // If password and confirmation are filled
-        if (isset($_POST['password']) && isset($_POST['confirm_password'])) {
-            // If password is valid
-            if (!empty($_POST['password'])) {
-                // If password and confirm password are equal
-                if ($_POST['password'] === $_POST['confirm_password']) {
-                    // Save the new password in the database
-                    $dbManager->saveUserPassword($_SESSION['id'], $_POST['password']);
-                    $message = 'Password has been saved!';
-                } else {
-                    $error = "Passwords are different";
-                }
-            } else {
-                $error = 'Password cannot be empty';
-            }
-        } else {
+        // Check password and confirmation are filled
+        if (empty($_POST['password']) || empty($_POST['confirm_password'])) {
             $error = 'Please fill the required fields';
+        // Check password and confirm password are equal
+        } else if ($_POST['password'] !== $_POST['confirm_password']) {
+            $error = "Passwords are different";
+        // Check password is strong enough
+        } else if (!IdentityManagement::isPasswordStrong($_POST['password'])) {
+            $error = 'Password should contain at least 8 characters, one upper case letter, one number, and one special character';
+        } else {
+            // Save the new password in the database
+            $dbManager->saveUserPassword($_SESSION['id'], $_POST['password']);
+            $message = 'Password has been saved!';
         }
     }
+
     $dbManager->closeConnection();
 } catch(PDOException $e) {
     die('Connection to the database failed');
