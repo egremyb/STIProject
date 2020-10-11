@@ -86,7 +86,8 @@ class dbManager
     function findAllMessagesFor($userId){
         $sql = 'SELECT m.id, m.date, u.username, m.subject FROM messages AS m
                 INNER JOIN Users AS u ON m.sender == u.id
-                WHERE m.recipient=:id';
+                WHERE m.recipient=:id
+                ORDER BY m.date DESC';
         $stmt = $this->file_db->prepare($sql);
         $stmt->bindParam(':id',$userId);
         $stmt->execute();
