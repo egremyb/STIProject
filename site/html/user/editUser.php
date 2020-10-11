@@ -14,35 +14,45 @@ if (!IdentityManagement::isPageAllowed($_SESSION['role'])) {
     exit();
 }
 
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+}
+
 if (isset($_POST['saveUser'])) {
     if (isset($_POST['id']) && isset($_POST['role'])) {
+        $id = $_POST['id'];
+
         // If checkbox is checked, $_POST var is set
         $isValid = isset($_POST['isValid']);
 
         // Save user details
         $dbManager = new dbManager();
-        $dbManager->saveUserDetails($_POST['id'], $isValid, $_POST['role']);
 
-        // Save password if set //todo: password strength perhaps ?
-        if (isset($_POST['password']) && strlen($_POST['password']) > 2) {
-            $dbManager->saveUserPassword($_POST['id'], $_POST['password']);
+        // Save password if set
+        if (isset($_POST['password']) && !empty($_POST['password'])) {
+            if (IdentityManagement::isPasswordStrong($_POST['password'])) {
+                $dbManager->saveUserPassword($id, $_POST['password']);
+            } else {
+                $error = 'Password should contain at least 8 characters, one upper case letter, one number, and one special character';
+            }
         }
 
-        //todo: better method ?
-        header('Location: editUser.php?id=' . $_POST['id']);
-        exit();
+        if (empty($error)) {
+            $dbManager->saveUserDetails($id, $isValid, $_POST['role']);
+            $message = 'User information saved';
+        }
     } else {
         // Invalid information passed to saveUser
         $error = 'Cannot edit user';
     }
 }
 
-if (!isset($_GET['id'])) {
+if (empty($id)) {
     die('Invalid arguments passed to the page');
 } else {
     $dbManager = new dbManager();
 
-    $user = $dbManager->findUserByID($_GET['id']);
+    $user = $dbManager->findUserByID($id);
     $roles = $dbManager->findAllRoles();
 }
 ?>
@@ -51,6 +61,7 @@ if (!isset($_GET['id'])) {
     <head>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="../css/common.css">
 
         <meta charset="UTF-8">
         <title>Edit user</title>
@@ -70,6 +81,12 @@ if (!isset($_GET['id'])) {
                             echo '<div class="row">
                                     <div class="col text-center">
                                         <p class="error">' . $error . '
+                                    </div>
+                                 </div>';
+                        } else if (isset($message) && !empty($message)) {
+                            echo '<div class="row">
+                                    <div class="col text-center">
+                                        <p class="message">' . $message . '
                                     </div>
                                  </div>';
                         }
