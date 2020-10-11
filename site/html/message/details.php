@@ -43,6 +43,7 @@ try {
         <title>View message</title>
     </head>
     <body>
+        <?php require_once('../fragments/NavBar.php');?>
         <form action="details.php" method="get">
             <div class="container">
                 <div class="row justify-content-center">
@@ -91,13 +92,13 @@ try {
                                     echo <<<EOT
                                         
                                         <button type="submit" class="btn btn-primary mt-4" name="btnDelete" value="yes">Delete</button>
-                                        <button type="submit" class="btn btn-secondary mt-4" formaction="../inbox.php">Cancel</button>
+                                        <a class="btn btn-secondary mt-4" href="../inbox.php">Cancel</a>
                                         <input type="hidden" name="id" value="{$message['id']}"/>
 EOT;
                                 }
                                 else {
                                     echo <<<EOT
-                                        <button type="submit" class="btn btn-primary mt-4" formaction="../inbox.php">Go to Inbox</button>
+                                        <a class="btn btn-primary mt-4" href="../inbox.php">Go to Inbox</a>
 EOT;
                                 }
                                 ?>

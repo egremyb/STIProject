@@ -36,7 +36,6 @@ try {
             }
         }
     }
-    $dbManager->closeConnection();
 }
 catch(PDOException $e) {
     // Print PDOException message
