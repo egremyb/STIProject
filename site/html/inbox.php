@@ -1,15 +1,12 @@
 <?php
 require_once('class/dbManager.php');
-session_start();
-// If the user is not logged he will be redirected to the login page
-if(!$_SESSION['logon']){
-    header('Location: login.php');
-    exit();
-}
-
+require_once('class/identityManagement.php');
 try {
     // Connection to the database
     $dbManager = new dbManager();
+    session_start();
+    IdentityManagement::isSessionValid($_SESSION, $dbManager, false);
+
     // Find all messages for current user
     $messages = $dbManager->findAllMessagesFor($_SESSION['id']);
     $dbManager->closeConnection();

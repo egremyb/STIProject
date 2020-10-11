@@ -1,21 +1,18 @@
 <?php
 require_once('class/dbManager.php');
 require_once('class/identityManagement.php');
-
-session_start();
-// If the user is not logged he will be redirected to the login page
-if(!$_SESSION['logon']){
-    header('Location: login.php');
-    exit();
-}
-
-// If the user is not an admin he cannot see the page
-if (!IdentityManagement::isPageAllowed($_SESSION['role'])) {
-    header('Location: inbox.php');
-    exit();
-}
 try{
     $dbManager = new dbManager();
+    session_start();
+    IdentityManagement::isSessionValid($_SESSION, $dbManager, false);
+
+    // If the user is not an admin he cannot see the page
+    if (!IdentityManagement::isPageAllowed($_SESSION['role'])) {
+        $dbManager->closeConnection();
+        header('Location: inbox.php');
+        exit();
+    }
+
     $users = $dbManager->findAllUsers();
     $dbManager->closeConnection();
 } catch(PDOException $e) {

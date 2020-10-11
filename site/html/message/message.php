@@ -1,13 +1,11 @@
 <?php
 require_once('../class/dbManager.php');
-session_start();
-// If the user is not logged he will be redirected to the login page
-if(!$_SESSION['logon']){
-    header('Location: ../login.php');
-}
+require_once('../class/identityManagement.php');
 try {
     // Connection to the database
     $dbManager = new dbManager;
+    session_start();
+    IdentityManagement::isSessionValid($_SESSION, $dbManager, true);
 
     // If an id is received it means that a reply is desired by the user
     if (isset($_GET['id'])) {
@@ -21,6 +19,7 @@ try {
                 "To: ${message['recipient']}\n" .
                 "Subject: ${message['subject']}\n" . $message['body'];
         } else {
+            $dbManager->closeConnection();
             die('Invalid arguments passed to the page');
         }
     }
@@ -34,11 +33,15 @@ try {
             // Check if the recipient wrote in the form exists in the database.
             if ($recipient != false) {
                 $dbManager->addMessage($_POST['subject'], $_POST['body'], $_SESSION['id'], $recipient['id']);
+                $dbManager->closeConnection();
                 header('Location: ../inbox.php');
             } else {
                 $error = "User unknown please try another user";
             }
-        } else header('Location: ../login.php');
+        } else {
+            $dbManager->closeConnection();
+            header('Location: ../login.php');
+        }
     }
 } catch(PDOException $e) {
     die('Connection to the database failed');

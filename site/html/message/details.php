@@ -1,23 +1,23 @@
 <?php
 require_once('../class/dbManager.php');
-session_start();
-// If the user is not logged he will be redirected to the login page
-if(!$_SESSION['logon']){
-    header('Location: ../login.php');
-}
+require_once('../class/identityManagement.php');
 
 try {
     // Connection to the database
     $dbManager = new dbManager();
+    session_start();
+    IdentityManagement::isSessionValid($_SESSION, $dbManager, true);
 
     // If no id is passed to the page an error is sent
     if (!isset($_GET['id'])) {
+        $dbManager->closeConnection();
         die('Invalid arguments passed to the page');
     }
 
     // If the delete button has been clicked we delete the message from the database
     if (isset($_GET['btnDelete'])) {
         $dbManager->deleteMessage($_GET['id']);
+        $dbManager->closeConnection();
         // When a messaged is deleted the user is send to the inbox
         header('Location: ../inbox.php');
     } else {
@@ -25,6 +25,7 @@ try {
         $message = $dbManager->findMessageByID($_GET['id']);
         // If no message is found we redirect to the inbox
         if ($message == false) {
+            $dbManager->closeConnection();
             header('Location: ../inbox.php');
         }
     }

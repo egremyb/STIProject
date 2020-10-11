@@ -1,59 +1,57 @@
 <?php
 require_once('../class/dbManager.php');
 require_once('../class/identityManagement.php');
-
-session_start();
-// If the user is not logged he will be redirected to the login page
-if(!$_SESSION['logon']){
-    header('Location: ../login.php');
-    exit();
-}
-
-if (!IdentityManagement::isPageAllowed($_SESSION['role'])) {
-    header('Location: ../inbox.php');
-    exit();
-}
-
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
-}
-
-if (isset($_POST['saveUser'])) {
-    if (isset($_POST['id']) && isset($_POST['role'])) {
-        $id = $_POST['id'];
-
-        // If checkbox is checked, $_POST var is set
-        $isValid = isset($_POST['isValid']);
-
-        // Save user details
-        $dbManager = new dbManager();
-
-        // Save password if set
-        if (isset($_POST['password']) && !empty($_POST['password'])) {
-            if (IdentityManagement::isPasswordStrong($_POST['password'])) {
-                $dbManager->saveUserPassword($id, $_POST['password']);
-            } else {
-                $error = 'Password should contain at least 8 characters, one upper case letter, one number, and one special character';
-            }
-        }
-
-        if (empty($error)) {
-            $dbManager->saveUserDetails($id, $isValid, $_POST['role']);
-            $message = 'User information saved';
-        }
-    } else {
-        // Invalid information passed to saveUser
-        $error = 'Cannot edit user';
-    }
-}
-
-if (empty($id)) {
-    die('Invalid arguments passed to the page');
-} else {
+try {
     $dbManager = new dbManager();
+    session_start();
+    IdentityManagement::isSessionValid($_SESSION, $dbManager, true);
 
-    $user = $dbManager->findUserByID($id);
-    $roles = $dbManager->findAllRoles();
+    if (!IdentityManagement::isPageAllowed($_SESSION['role'])) {
+        $dbManager->closeConnection();
+        header('Location: ../inbox.php');
+        exit();
+    }
+
+    if (isset($_GET['id'])) {
+        $id = $_GET['id'];
+    }
+
+    if (isset($_POST['saveUser'])) {
+        if (isset($_POST['id']) && isset($_POST['role'])) {
+            $id = $_POST['id'];
+
+            // If checkbox is checked, $_POST var is set
+            $isValid = isset($_POST['isValid']);
+
+            // Save user details
+            // Save password if set
+            if (isset($_POST['password']) && !empty($_POST['password'])) {
+                if (IdentityManagement::isPasswordStrong($_POST['password'])) {
+                    $dbManager->saveUserPassword($id, $_POST['password']);
+                } else {
+                    $error = 'Password should contain at least 8 characters, one upper case letter, one number, and one special character';
+                }
+            }
+
+            if (empty($error)) {
+                $dbManager->saveUserDetails($id, $isValid, $_POST['role']);
+                $message = 'User information saved';
+            }
+        } else {
+            // Invalid information passed to saveUser
+            $error = 'Cannot edit user';
+        }
+    }
+
+    if (empty($id)) {
+        $dbManager->closeConnection();
+        die('Invalid arguments passed to the page');
+    } else {
+        $user = $dbManager->findUserByID($id);
+        $roles = $dbManager->findAllRoles();
+    }
+} catch(PDOException $e) {
+    die('Connection to the database failed');
 }
 ?>
 <!DOCTYPE html>

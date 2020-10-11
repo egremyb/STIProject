@@ -38,4 +38,18 @@ class IdentityManagement
 
         return $uppercase && $lowercase && $number && $specialChars && strlen($password) >= 8;
     }
+
+    public static function isSessionValid($session, $dbManager, $isInFolder) {
+        $user = $dbManager->findUserByID($session['id']);
+        // If the user is not logged he will be redirected to the login page
+        if(!$session['logon'] || $user == NULL){
+            $dbManager->closeConnection();
+            if($isInFolder) {
+                header('Location: ../login.php');
+            } else{
+                header('Location: login.php');
+            }
+            exit();
+        }
+    }
 }

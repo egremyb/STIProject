@@ -1,28 +1,24 @@
 <?php
 require_once('../class/dbManager.php');
 require_once('../class/identityManagement.php');
-
-session_start();
-// If the user is not logged he will be redirected to the login page
-if(!$_SESSION['logon']){
-    header('Location: ../login.php');
-    exit();
-}
-
-// If the user is not administrator we redirect him
-if (!IdentityManagement::isPageAllowed($_SESSION['role'])) {
-    header('Location: ../inbox.php');
-    exit();
-}
-
-// To not lose all the information added to the form
-$username = $_POST['username'];
-$password = $_POST['password'];
-$isValid = isset($_POST['isValid']);
-$selectedRole = $_POST['role'];
-
 try {
     $dbManager = new dbManager();
+    session_start();
+    IdentityManagement::isSessionValid($_SESSION, $dbManager, true);
+
+    // If the user is not administrator we redirect him
+    if (!IdentityManagement::isPageAllowed($_SESSION['role'])) {
+        $dbManager->closeConnection();
+        header('Location: ../inbox.php');
+        exit();
+    }
+
+    // To not lose all the information added to the form
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+    $isValid = isset($_POST['isValid']);
+    $selectedRole = $_POST['role'];
+
 
     if (isset($_POST['addUser'])) {
         // If the form is filled
@@ -34,7 +30,7 @@ try {
                 $error = "Username not available";
             } else {
                 $dbManager->addUser($username, $password, $isValid, $selectedRole);
-
+                $dbManager->closeConnection();
                 header('Location: ../users.php');
                 exit();
             }

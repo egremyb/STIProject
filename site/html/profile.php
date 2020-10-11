@@ -2,15 +2,11 @@
 require_once('class/dbManager.php');
 require_once('class/identityManagement.php');
 
-session_start();
-// If the user is not logged he will be redirected to the login page
-if(!$_SESSION['logon']){
-    header('Location: login.php');
-    exit();
-}
 try {
     // Connection to the database
     $dbManager = new dbManager();
+    session_start();
+    IdentityManagement::isSessionValid($_SESSION, $dbManager,false);
 
     // Find user in the database
     $user = $dbManager->findUserByID($_SESSION['id']);
