@@ -9,6 +9,10 @@ class IdentityManagement
     private static $ADMIN_ROLE = 'Administrator';
     private static $ADMIN_PAGES = ['users.php', 'editUser.php', 'addUser.php', 'deleteUser.php'];
 
+    /**
+     * @param $role String that contains the role of a user
+     * @return bool true if it has admin rights and the page accessed is not an admin page false otherwise
+     */
     public static function isPageAllowed($role) {
         $page = basename($_SERVER['PHP_SELF']);
 

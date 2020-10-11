@@ -8,28 +8,37 @@ if(!$_SESSION['logon']){
     header('Location: login.php');
     exit();
 }
+try {
+    // Connection to the database
+    $dbManager = new dbManager();
 
-$dbManager = new dbManager();
-$user = $dbManager->findUserByID($_SESSION['id']);
+    // Find user in the database
+    $user = $dbManager->findUserByID($_SESSION['id']);
 
-// If form was submitted
-if (isset($_POST['savePassword'])) {
-    // If password and confirmation are filled
-    if (isset($_POST['password']) && isset($_POST['confirm_password'])) {
-        // If password is valid
-        if (!empty($_POST['password'])) {
-            if ($_POST['password'] === $_POST['confirm_password']) {
-                $dbManager->saveUserPassword($_SESSION['id'], $_POST['password']);
-                $message = 'Password has been saved!';
+    // If form was submitted
+    if (isset($_POST['savePassword'])) {
+        // If password and confirmation are filled
+        if (isset($_POST['password']) && isset($_POST['confirm_password'])) {
+            // If password is valid
+            if (!empty($_POST['password'])) {
+                // If password and confirm password are equal
+                if ($_POST['password'] === $_POST['confirm_password']) {
+                    // Save the new password in the database
+                    $dbManager->saveUserPassword($_SESSION['id'], $_POST['password']);
+                    $message = 'Password has been saved!';
+                } else {
+                    $error = "Passwords are different";
+                }
             } else {
-                $error = "Passwords are different";
+                $error = 'Password cannot be empty';
             }
         } else {
-            $error = 'Password cannot be empty';
+            $error = 'Please fill the required fields';
         }
-    } else {
-        $error = 'Please fill the required fields';
     }
+    $dbManager->closeConnection();
+} catch(PDOException $e) {
+    die('Connection to the database failed');
 }
 ?>
 <!DOCTYPE html>

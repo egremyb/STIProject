@@ -1,7 +1,8 @@
+<!-- Login page for the website -->
 <?php
 require_once('class/dbManager.php');
-/*Login page for the website*/
 try {
+    // Create the connection to the database
     $dbManager = new dbManager();
 
     // Check if the password is set and the username too
@@ -11,14 +12,18 @@ try {
 
         // Check if the user sent by the form exists in the database
         $user = $dbManager->findUserByUsername($_POST['username']);
+        // If the user does not exist the database send the false value
         if($user != false){
+            // Check that the password entered is the same as the user stored
             if(password_verify($_POST['pass'], $user['password'])){
+                // Check that the account is active
                 if ($user['isValid'] !== 'yes') {
                     $error = "Account is not active";
                 } else {
                     // If the user isn't already logged a new session will start
                     if (!session_id())
                         session_start();
+                    // Set different Sessions values for the user
                     $_SESSION['logon'] = true;
                     $_SESSION['id'] = $user['id'];
                     $_SESSION['role'] = $dbManager->getRoleName($user['role']);

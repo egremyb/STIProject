@@ -5,19 +5,31 @@ session_start();
 if(!$_SESSION['logon']){
     header('Location: ../login.php');
 }
-$dbManager = new dbManager();
 
-// If the delete button has been clicked we delete the message from the database
-if (isset($_GET['btnDelete'])) {
-    $dbManager->deleteMessage($_GET['id']);
-    // When a messaged is deleted the user is send to the inbox
-        header('Location: ../inbox.php');
-} else {
-    // Search for the desired message
-    $message = $dbManager->findMessageByID($_GET['id']);
-    if($message == false){
-        header('Location: ../inbox.php');
+try {
+    // Connection to the database
+    $dbManager = new dbManager();
+
+    // If no id is passed to the page an error is sent
+    if (!isset($_GET['id'])) {
+        die('Invalid arguments passed to the page');
     }
+
+    // If the delete button has been clicked we delete the message from the database
+    if (isset($_GET['btnDelete'])) {
+        $dbManager->deleteMessage($_GET['id']);
+        // When a messaged is deleted the user is send to the inbox
+        header('Location: ../inbox.php');
+    } else {
+        // Search for the desired message to show
+        $message = $dbManager->findMessageByID($_GET['id']);
+        // If no message is found we redirect to the inbox
+        if ($message == false) {
+            header('Location: ../inbox.php');
+        }
+    }
+} catch(PDOException $e) {
+    die('Connection to the database failed');
 }
 ?>
 <!DOCTYPE html>

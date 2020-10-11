@@ -9,39 +9,45 @@ if(!$_SESSION['logon']){
     exit();
 }
 
+// If the user is not administrator we redirect him
 if (!IdentityManagement::isPageAllowed($_SESSION['role'])) {
     header('Location: ../inbox.php');
     exit();
 }
 
+// To not lose all the information added to the form
 $username = $_POST['username'];
 $password = $_POST['password'];
 $isValid = isset($_POST['isValid']);
 $selectedRole = $_POST['role'];
 
-if (isset($_POST['addUser'])) {
-    if (!empty($username) && !empty($password) && !empty($selectedRole)) {
-        // Save user details
-        $dbManager = new dbManager();
-        $foundUser = $dbManager->findUserByUsername($username);
-        if ($foundUser) {
-            $error = "Username not available";
+try {
+    $dbManager = new dbManager();
+
+    if (isset($_POST['addUser'])) {
+        // If the form is filled
+        if (!empty($username) && !empty($password) && !empty($selectedRole)) {
+            // Save user details
+            // The username has to be unique so if the user is found in the database show an error message
+            $foundUser = $dbManager->findUserByUsername($username);
+            if ($foundUser) {
+                $error = "Username not available";
+            } else {
+                $dbManager->addUser($username, $password, $isValid, $selectedRole);
+
+                header('Location: ../users.php');
+                exit();
+            }
         } else {
-            //todo: password strength perhaps ?
-            $dbManager->addUser($username, $password, $isValid, $selectedRole);
-
-            //todo: better method ?
-            header('Location: ../users.php');
-            exit();
+            // Invalid information passed to saveUser
+            $error = 'Invalid information to create a user';
         }
-    } else {
-        // Invalid information passed to saveUser
-        $error = 'Invalid information to create a user';
     }
-}
 
-$dbManager = new dbManager();
-$roles = $dbManager->findAllRoles();
+    $roles = $dbManager->findAllRoles();
+} catch(PDOException $e) {
+    die('Connection to the database failed');
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

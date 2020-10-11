@@ -5,34 +5,43 @@ session_start();
 if(!$_SESSION['logon']){
     header('Location: ../login.php');
 }
-$dbManager = new dbManager;
+try {
+    // Connection to the database
+    $dbManager = new dbManager;
 
-// If an id is received it means that a reply is desired by the user
-if(isset($_GET['id'])){
-    $message = $dbManager->findMessageByID($_GET['id']);
-    $replyContent = "\n\n\n\n" .
-        "---------- Original message ----------\n" .
-        "From: ${message['sender']}\n" .
-        "Sent: ${message['date']}\n" .
-        "To: ${message['recipient']}\n" .
-        "Subject: ${message['subject']}\n" . $message['body'];
-}
-
-// Check that the form is completed
-if (isset($_POST['recipient']) && isset($_POST['subject']) && isset($_POST['body'])) {
-    $user = $dbManager->findUserByID($_SESSION['id']);
-    // Check that the session has a valid id
-    if($user != NULL) {
-        $recipient = $dbManager->findUserByUsername($_POST['recipient']);
-        // Check if the recipient wrote in the form exists in the database. If the user is unknown the site will do nothing
-        if($recipient != false){
-            $dbManager->addMessage($_POST['subject'], $_POST['body'], $_SESSION['id'], $recipient['id']);
-            header('Location: ../inbox.php');
+    // If an id is received it means that a reply is desired by the user
+    if (isset($_GET['id'])) {
+        $message = $dbManager->findMessageByID($_GET['id']);
+        // If the message exists we creat a reply content
+        if($message != false){
+            $replyContent = "\n\n\n\n" .
+                "---------- Original message ----------\n" .
+                "From: ${message['sender']}\n" .
+                "Sent: ${message['date']}\n" .
+                "To: ${message['recipient']}\n" .
+                "Subject: ${message['subject']}\n" . $message['body'];
         } else {
-            $error = "User unknown please try another user";
+            die('Invalid arguments passed to the page');
         }
     }
-    else header('Location: ../login.php');
+
+    // Check that the form is completed
+    if (isset($_POST['recipient']) && isset($_POST['subject']) && isset($_POST['body'])) {
+        $user = $dbManager->findUserByID($_SESSION['id']);
+        // Check that the session has a valid id
+        if ($user != NULL) {
+            $recipient = $dbManager->findUserByUsername($_POST['recipient']);
+            // Check if the recipient wrote in the form exists in the database.
+            if ($recipient != false) {
+                $dbManager->addMessage($_POST['subject'], $_POST['body'], $_SESSION['id'], $recipient['id']);
+                header('Location: ../inbox.php');
+            } else {
+                $error = "User unknown please try another user";
+            }
+        } else header('Location: ../login.php');
+    }
+} catch(PDOException $e) {
+    die('Connection to the database failed');
 }
 ?>
 <!DOCTYPE html>

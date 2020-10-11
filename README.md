@@ -3,6 +3,8 @@
 ## Table of Content
 - [Introduction](#Introduction)  
 - [Installation](#Installation)
+- [Structure](#Structure)
+- [Usage](#Usage)
 
 ## Introduction
 
@@ -32,6 +34,13 @@ Here is the explaination on how to install the site :
   `git clone git@github.com:Naludrag/STIProject.git`
 
 2. Run the script `run-docker.sh`. This script will build a docker image named `sti_project_naludrag` and will run it on the `8080` port of your localhost.
+
+## Structure
+
+## Usage
+
+
+
 
 
 

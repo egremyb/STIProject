@@ -9,13 +9,18 @@ if(!$_SESSION['logon']){
     exit();
 }
 
+// If the user is not an admin he cannot see the page
 if (!IdentityManagement::isPageAllowed($_SESSION['role'])) {
     header('Location: inbox.php');
     exit();
 }
-
-$dbManager = new dbManager();
-$users = $dbManager->findAllUsers();
+try{
+    $dbManager = new dbManager();
+    $users = $dbManager->findAllUsers();
+    $dbManager->closeConnection();
+} catch(PDOException $e) {
+    die('Connection to the database failed');
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -44,7 +49,6 @@ $users = $dbManager->findAllUsers();
                         </thead>
                         <tbody>
                         <?php
-                        //todo: Add message if $users is null or empty
                         foreach($users as $user) {
                             echo <<<EOT
                                 <tr>

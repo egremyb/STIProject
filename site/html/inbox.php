@@ -8,13 +8,14 @@ if(!$_SESSION['logon']){
 }
 
 try {
+    // Connection to the database
     $dbManager = new dbManager();
-
+    // Find all messages for current user
     $messages = $dbManager->findAllMessagesFor($_SESSION['id']);
+    $dbManager->closeConnection();
 }
 catch(PDOException $e) {
-    // Print PDOException message
-    echo $e->getMessage();
+    die('Connection to the database failed');
 }
 ?>
 <!DOCTYPE html>
@@ -27,6 +28,7 @@ catch(PDOException $e) {
     <title>Inbox</title>
 </head>
 <body>
+    <!-- Include the navigation bar of the site -->
     <?php require_once('fragments/NavBar.php')?>
     <!-- Page Content -->
     <div class="container">
@@ -43,6 +45,7 @@ catch(PDOException $e) {
                     </thead>
                     <tbody>
                     <?php
+                    // Will show all messages
                     foreach($messages as $msg) {
                         echo <<<EOT
                     <tr>
