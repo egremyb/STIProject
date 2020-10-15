@@ -29,10 +29,14 @@ try {
             if ($foundUser) {
                 $error = "Username not available";
             } else {
-                $dbManager->addUser($username, $password, $isValid, $selectedRole);
-                $dbManager->closeConnection();
-                header('Location: ../users.php');
-                exit();
+                if(IdentityManagement::isPasswordStrong($password)) {
+                    $dbManager->addUser($username, $password, $isValid, $selectedRole);
+                    $dbManager->closeConnection();
+                    header('Location: ../users.php');
+                    exit();
+                } else {
+                    $error = 'Password should contain at least 8 characters, one upper case letter, one number, and one special character';
+                }
             }
         } else {
             // Invalid information passed to saveUser

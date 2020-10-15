@@ -72,6 +72,13 @@ Here is the explanation on how to install the site :
 
 2. Run the script `run-docker.sh`. This script will build a docker image named `sti_project_naludrag` and will run it on the `8080` port of your localhost.
 
+After that you will see a login page you can use the following credentials :
+
+| Username | Password     | Role          |
+|----------|--------------|---------------|
+| admin    | N0t_e@5y     | Administrator |
+| test     | t00_E@sY     | Collaborator  |
+
 ## Usage
 
 ### Login Page
@@ -146,6 +153,10 @@ In this mode the page will have two buttons :
 The profile page is used to change the password of the current user, it also displays the username and the role :
 ![Profile Page](./images/Profile.png)
 
+A password policy has been set and it is the following : 
+
+Password should contain at least 8 characters, one upper case letter, one number, and one special character
+
 ### User management page
 This page can only be accessed by administrators:  
 ![User management Page](./images/UserManagement.png)
@@ -161,7 +172,7 @@ This page can only be accessed by administrators:
 
 On this page, we can create a new account by specifying the following information:
 - Username
-- Password
+- Password (Be careful you have to write the password following our password policy)
 - Whether the account is enabled or not
 - Role of the user (Administrator or Collaborator)
 
