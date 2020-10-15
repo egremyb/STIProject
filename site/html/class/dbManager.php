@@ -68,6 +68,7 @@ class dbManager
 
     /**
      * @param $id int id of the role
+     * @return String role of the user
      */
     function getRoleName($id){
         $stmt = $this->file_db->query('SELECT name from Roles WHERE id=:id');
@@ -247,7 +248,8 @@ class dbManager
     }
 
     /**
-     * @param $val boolean value to convert to SQLite string
+     * @param $val boolean boolean value to convert to SQLite string
+     * @return string boolean value in SQLite format
      */
     function booleanToSQLite($val)
     {
@@ -257,7 +259,6 @@ class dbManager
         else if ($val === false)
             return 'no';
 
-        echo 'throwing';
         throw new InvalidArgumentException("val must be a boolean");
     }
 }
