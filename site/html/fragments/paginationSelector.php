@@ -7,11 +7,12 @@ $curPageName = substr($_SERVER["SCRIPT_NAME"],strrpos($_SERVER["SCRIPT_NAME"],"/
     <form action="<?= $curPageName ?>" method="post">
         <select name="records-limit" id="records-limit" class="custom-select">
             <option disabled selected>Number of data to show per page</option>
-            <?php foreach([5,7,10,12] as $limit) : ?>
+            <!-- Show the different option for the number of object to select-->
+            <?php foreach([1,7,10,12] as $pageInit['limit']) : ?>
                 <option
-                    <?php if(isset($_SESSION['records-limit']) && $_SESSION['records-limit'] == $limit) echo 'selected'; ?>
-                    value="<?= $limit; ?>">
-                    <?= $limit; ?>
+                    <?php if(isset($_SESSION['records-limit']) && $_SESSION['records-limit'] == $pageInit['limit']) echo 'selected'; ?>
+                    value="<?= $pageInit['limit']; ?>">
+                    <?= $pageInit['limit']; ?>
                 </option>
             <?php endforeach; ?>
         </select>

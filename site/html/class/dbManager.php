@@ -68,6 +68,7 @@ class dbManager
 
     /**
      * @param $id int id of the role
+     * @return String name of the role
      */
     function getRoleName($id){
         $stmt = $this->file_db->query('SELECT name from Roles WHERE id=:id');
@@ -248,6 +249,7 @@ class dbManager
 
     /**
      * @param $val boolean value to convert to SQLite string
+     * @return String yes if it is true or no if false
      */
     function booleanToSQLite($val)
     {

@@ -28,6 +28,10 @@ class IdentityManagement
         return true;
     }
 
+    /**
+     * @param $password String password to check if policy is respected
+     * @return bool true if password contains a char uppercase, a char lowercase, a special char and a number
+     */
     public static function isPasswordStrong($password) {
         // Source: https://www.codexworld.com/how-to/validate-password-strength-in-php/
         // Validate password strength
@@ -39,9 +43,14 @@ class IdentityManagement
         return $uppercase && $lowercase && $number && $specialChars && strlen($password) >= 8;
     }
 
+    /**
+     * @param $session array contain the session of the user
+     * @param $dbManager dbManager Object dbManager to user a function
+     * @param $isInFolder boolean true if page is in folder false otherwise
+     */
     public static function isSessionValid($session, $dbManager, $isInFolder) {
         $user = $dbManager->findUserByID($session['id']);
-        // If the user is not logged he will be redirected to the login page
+        // If the user is not logged or the flag logon is false the user will be redirected to the login page
         if(!$session['logon'] || $user == NULL){
             $dbManager->closeConnection();
             if($isInFolder) {

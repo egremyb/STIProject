@@ -1,30 +1,26 @@
 <?php
 require_once('class/dbManager.php');
 require_once('class/identityManagement.php');
+require_once('class/utils.php');
 try {
     // Connection to the database
     $dbManager = new dbManager();
     session_start();
     IdentityManagement::isSessionValid($_SESSION, $dbManager, false);
 
-    if(isset($_POST['records-limit'])){
-        $_SESSION['records-limit'] = $_POST['records-limit'];
-    }
-
-    $limit = isset($_SESSION['records-limit']) ? $_SESSION['records-limit'] : 5;
-    $page = (isset($_GET['page']) && is_numeric($_GET['page']) ) ? $_GET['page'] : 1;
-    $paginationStart = ($page - 1) * $limit;
-    // Find all messages for current user
-    $messages = $dbManager->findAllMessagesForUser($_SESSION['id'], $paginationStart, $limit);
-
+    // Initialize the value for the pagination
+    $pageInit = Utils::initPagination($_POST['records-limit'], $_GET['page']);
+    // Find all messages for current user with the right range of message for the page desired
+    $messages = $dbManager->findAllMessagesForUser($_SESSION['id'], $pageInit['paginationStart'], $pageInit['limit']);
+    // Count all the message for the user in the database
     $allMessages = $dbManager->countAllMessagesForUser($_SESSION['id']);
 
     // Calculate total pages
-    $totoalPages = ceil($allMessages[0]['count(m.id)'] / $limit);
+    $totalPages = ceil($allMessages[0]['count(m.id)'] / $pageInit['limit']);
 
     // Prev + Next
-    $prev = $page - 1;
-    $next = $page + 1;
+    $prev = $pageInit['page'] - 1;
+    $next = $pageInit['page'] + 1;
 
     $dbManager->closeConnection();
 }

@@ -1,29 +1,11 @@
 <?php
 require_once('class/dbManager.php');
 require_once('class/identityManagement.php');
+require_once('class/utils.php');
 try{
     $dbManager = new dbManager();
     session_start();
     IdentityManagement::isSessionValid($_SESSION, $dbManager, false);
-
-    if(isset($_POST['records-limit'])){
-        $_SESSION['records-limit'] = $_POST['records-limit'];
-    }
-
-    $limit = isset($_SESSION['records-limit']) ? $_SESSION['records-limit'] : 5;
-    $page = (isset($_GET['page']) && is_numeric($_GET['page']) ) ? $_GET['page'] : 1;
-    $paginationStart = ($page - 1) * $limit;
-    // Find all messages for current user
-    $users = $dbManager->findAllUsers($paginationStart, $limit);
-
-    $allUsers = $dbManager->countAllUsers();
-
-    // Calculate total pages
-    $totoalPages = ceil($allUsers[0]['count(id)'] / $limit);
-
-    // Prev + Next
-    $prev = $page - 1;
-    $next = $page + 1;
 
     // If the user is not an admin he cannot see the page
     if (!IdentityManagement::isPageAllowed($_SESSION['role'])) {
@@ -31,7 +13,20 @@ try{
         header('Location: inbox.php');
         exit();
     }
+    // Initialize the value for the pagination
+    $pageInit = Utils::initPagination($_POST['records-limit'], $_GET['page']);
 
+    // Find all users for the page
+    $users = $dbManager->findAllUsers($pageInit['paginationStart'], $pageInit['limit']);
+    // Count all the users in the database
+    $allUsers = $dbManager->countAllUsers();
+
+    // Calculate total pages
+    $totalPages = ceil($allUsers[0]['count(id)'] / $pageInit["limit"]);
+
+    // Prev + Next
+    $prev = $pageInit['page'] - 1;
+    $next = $pageInit['page'] + 1;
 
     $dbManager->closeConnection();
 } catch(PDOException $e) {
