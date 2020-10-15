@@ -1,29 +1,11 @@
 <?php
 require_once('class/dbManager.php');
 require_once('class/identityManagement.php');
+require_once('class/utils.php');
 try{
     $dbManager = new dbManager();
     session_start();
     IdentityManagement::isSessionValid($_SESSION, $dbManager);
-
-    if(isset($_POST['records-limit'])){
-        $_SESSION['records-limit'] = $_POST['records-limit'];
-    }
-
-    $limit = isset($_SESSION['records-limit']) ? $_SESSION['records-limit'] : 5;
-    $page = (isset($_GET['page']) && is_numeric($_GET['page']) ) ? $_GET['page'] : 1;
-    $paginationStart = ($page - 1) * $limit;
-    // Find all messages for current user
-    $users = $dbManager->findAllUsers($paginationStart, $limit);
-
-    $allUsers = $dbManager->countAllUsers();
-
-    // Calculate total pages
-    $totalPages = ceil($allUsers[0]['count(id)'] / $limit);
-
-    // Prev + Next
-    $prev = $page - 1;
-    $next = $page + 1;
 
     // If the user is not an admin he cannot see the page
     if (!IdentityManagement::isPageAllowed($_SESSION['role'])) {
@@ -31,7 +13,20 @@ try{
         header('Location: inbox.php');
         exit();
     }
+    // Initialize the value for the pagination
+    $pageInit = Utils::initPagination($_POST['records-limit'], $_GET['page']);
 
+    // Find all users for the page
+    $users = $dbManager->findAllUsers($pageInit['paginationStart'], $pageInit['limit']);
+    // Count all the users in the database
+    $allUsers = $dbManager->countAllUsers();
+
+    // Calculate total pages
+    $totalPages = ceil($allUsers[0]['count(id)'] / $pageInit["limit"]);
+
+    // Prev + Next
+    $prev = $pageInit['page'] - 1;
+    $next = $pageInit['page'] + 1;
 
     $dbManager->closeConnection();
 } catch(PDOException $e) {
@@ -44,7 +39,7 @@ try{
 
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
         <meta charset="UTF-8">
@@ -91,6 +86,13 @@ EOT;
             </div>
             <a href="user/addUser.php" class="btn btn-primary mt-4">Add user</a>
         </div>
+        <script>
+            $(document).ready(function () {
+                $('#records-limit').change(function () {
+                    $('form').submit();
+                })
+            });
+        </script>
     </body>
 </html>
 
