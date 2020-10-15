@@ -8,7 +8,7 @@ $curPageName = substr($_SERVER["SCRIPT_NAME"],strrpos($_SERVER["SCRIPT_NAME"],"/
         <select name="records-limit" id="records-limit" class="custom-select">
             <option disabled selected>Number of data to show per page</option>
             <!-- Show the different option for the number of object to select-->
-            <?php foreach([1,7,10,12] as $pageInit['limit']) : ?>
+            <?php foreach([5,7,10,12] as $pageInit['limit']) : ?>
                 <option
                     <?php if(isset($_SESSION['records-limit']) && $_SESSION['records-limit'] == $pageInit['limit']) echo 'selected'; ?>
                     value="<?= $pageInit['limit']; ?>">

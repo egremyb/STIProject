@@ -3,9 +3,6 @@
 class Utils
 {
     public static function initPagination($records_limit, $get_page){
-        var_dump($records_limit);
-
-        var_dump($_SESSION['records-limit']);
         // If the users choose a record limit we set it a session variable for the entire site
         if(isset($records_limit)){
             $_SESSION['records-limit'] = $records_limit;
