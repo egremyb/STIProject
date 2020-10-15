@@ -5,7 +5,7 @@ try {
     // Connection to the database
     $dbManager = new dbManager();
     session_start();
-    IdentityManagement::isSessionValid($_SESSION, $dbManager, false);
+    IdentityManagement::isSessionValid($_SESSION, $dbManager);
 
     if(isset($_POST['records-limit'])){
         $_SESSION['records-limit'] = $_POST['records-limit'];

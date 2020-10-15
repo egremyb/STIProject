@@ -5,7 +5,7 @@ try {
     // Connection to the database
     $dbManager = new dbManager;
     session_start();
-    IdentityManagement::isSessionValid($_SESSION, $dbManager, true);
+    IdentityManagement::isSessionValid($_SESSION, $dbManager);
 
     // If an id is received it means that a reply is desired by the user
     if (isset($_GET['id'])) {

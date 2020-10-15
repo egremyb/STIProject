@@ -6,7 +6,7 @@ try {
     // Connection to the database
     $dbManager = new dbManager();
     session_start();
-    IdentityManagement::isSessionValid($_SESSION, $dbManager, true);
+    IdentityManagement::isSessionValid($_SESSION, $dbManager);
 
     // If no id is passed to the page an error is sent
     if (!isset($_GET['id'])) {

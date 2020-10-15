@@ -6,7 +6,7 @@ try {
     // Connection to the database
     $dbManager = new dbManager();
     session_start();
-    IdentityManagement::isSessionValid($_SESSION, $dbManager,false);
+    IdentityManagement::isSessionValid($_SESSION, $dbManager);
 
     // Find user in the database
     $user = $dbManager->findUserByID($_SESSION['id']);

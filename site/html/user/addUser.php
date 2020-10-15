@@ -4,7 +4,7 @@ require_once('../class/identityManagement.php');
 try {
     $dbManager = new dbManager();
     session_start();
-    IdentityManagement::isSessionValid($_SESSION, $dbManager, true);
+    IdentityManagement::isSessionValid($_SESSION, $dbManager);
 
     // If the user is not administrator we redirect him
     if (!IdentityManagement::isPageAllowed($_SESSION['role'])) {

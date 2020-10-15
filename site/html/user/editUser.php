@@ -4,7 +4,7 @@ require_once('../class/identityManagement.php');
 try {
     $dbManager = new dbManager();
     session_start();
-    IdentityManagement::isSessionValid($_SESSION, $dbManager, true);
+    IdentityManagement::isSessionValid($_SESSION, $dbManager);
 
     if (!IdentityManagement::isPageAllowed($_SESSION['role'])) {
         $dbManager->closeConnection();
