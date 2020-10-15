@@ -77,7 +77,7 @@ try {
                     </div>
                     <div class="row align-items-center">
                         <div class="col mt-4">
-                            <label for="username">Role</label>
+                            <label for="role">Role</label>
                             <input type="text" id="role" name="role" class="form-control" readonly value="<?php echo $_SESSION['role'] ?>" placeholder="Role">
                         </div>
                     </div>
