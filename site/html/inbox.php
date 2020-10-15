@@ -7,8 +7,25 @@ try {
     session_start();
     IdentityManagement::isSessionValid($_SESSION, $dbManager, false);
 
+    if(isset($_POST['records-limit'])){
+        $_SESSION['records-limit'] = $_POST['records-limit'];
+    }
+
+    $limit = isset($_SESSION['records-limit']) ? $_SESSION['records-limit'] : 5;
+    $page = (isset($_GET['page']) && is_numeric($_GET['page']) ) ? $_GET['page'] : 1;
+    $paginationStart = ($page - 1) * $limit;
     // Find all messages for current user
-    $messages = $dbManager->findAllMessagesFor($_SESSION['id']);
+    $messages = $dbManager->findAllMessagesForUser($_SESSION['id'], $paginationStart, $limit);
+
+    $allMessages = $dbManager->countAllMessagesForUser($_SESSION['id']);
+
+    // Calculate total pages
+    $totoalPages = ceil($allMessages[0]['count(m.id)'] / $limit);
+
+    // Prev + Next
+    $prev = $page - 1;
+    $next = $page + 1;
+
     $dbManager->closeConnection();
 }
 catch(PDOException $e) {
@@ -28,11 +45,11 @@ catch(PDOException $e) {
 </head>
 <body>
     <!-- Include the navigation bar of the site -->
-    <?php require_once('fragments/NavBar.php')?>
+    <?php require_once('fragments/navBar.php')?>
     <!-- Page Content -->
     <div class="container">
+        <?php require_once('fragments/paginationSelector.php') ?>
         <div class="card border-0 shadow my-5">
-            <div>
                 <table class="table messages">
                     <thead class="thead-light">
                     <tr>
@@ -64,8 +81,19 @@ EOT;
                     ?>
                     </tbody>
                 </table>
-            </div>
+                <?php require_once('fragments/pagination.php'); ?>
         </div>
     </div>
+
+    <!-- jQuery + Bootstrap JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#records-limit').change(function () {
+                $('form').submit();
+            })
+        });
+    </script>
 </body>
 </html>

@@ -80,14 +80,34 @@ class dbManager
 
     /**
      * @param $userId int id of the user the messages are addressed to
-     * @return array boolean false if the connection with the DB isn't set
-     *                            or an object that contains all the messages
+     * @param $paginationStart int tell from where to start for the pagination
+     * @param $limit int indicates the limit for the pagination
+     * @return false|array boolean false if the connection with the DB isn't set
+     *                            or an array that contains all the messages
      */
-    function findAllMessagesFor($userId){
+    function findAllMessagesForUser($userId, $paginationStart, $limit){
         $sql = 'SELECT m.id, m.date, u.username, m.subject FROM messages AS m
                 INNER JOIN Users AS u ON m.sender == u.id
                 WHERE m.recipient=:id
-                ORDER BY m.date DESC';
+                ORDER BY m.date DESC
+                LIMIT :paginationStart, :limit';
+        $stmt = $this->file_db->prepare($sql);
+        $stmt->bindParam(':id',$userId);
+        $stmt->bindParam(':paginationStart',$paginationStart);
+        $stmt->bindParam(':limit',$limit);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
+    /**
+     * @param $userId int id of the user the messages are addressed to
+     * @return false|array boolean false if the connection with the DB isn't set
+     *                            or an array that contains the number of messages of a user
+     */
+    function countAllMessagesForUser($userId){
+        $sql = 'SELECT count(m.id) FROM messages AS m
+                INNER JOIN Users AS u ON m.sender == u.id
+                WHERE m.recipient=:id';
         $stmt = $this->file_db->prepare($sql);
         $stmt->bindParam(':id',$userId);
         $stmt->execute();
@@ -117,13 +137,31 @@ class dbManager
     }
 
     /**
-     * @return false|PDOStatement all the users in the database
+     * @param $paginationStart int tell from where to start for the pagination
+     * @param $limit int indicates the limit for the pagination
+     * @return false|array boolean false if the connection with the DB isn't set
+     *                            or an array that contains all the users
      */
-    function findAllUsers() {
-        return $this->file_db->query(
-            "SELECT Users.id, username, isValid, Roles.name AS 'rolename' FROM Users 
-                  INNER JOIN Roles ON Users.role = Roles.id"
-        );
+    function findAllUsers($paginationStart, $limit) {
+        $sql = "SELECT Users.id, username, isValid, Roles.name AS 'rolename' FROM Users 
+                  INNER JOIN Roles ON Users.role = Roles.id
+                  LIMIT :paginationStart, :limit";
+        $stmt = $this->file_db->prepare($sql);
+        $stmt->bindParam(':paginationStart',$paginationStart);
+        $stmt->bindParam(':limit',$limit);
+        $stmt->execute();
+        return $stmt->fetchAll();
+    }
+
+    /**
+     * @return false|array boolean false if the connection with the DB isn't set
+     *                            or an array that contains the number of users
+     */
+    function countAllUsers() {
+        $sql = "SELECT count(id) FROM Users";
+        $stmt = $this->file_db->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll();
     }
 
     /**

@@ -6,6 +6,25 @@ try{
     session_start();
     IdentityManagement::isSessionValid($_SESSION, $dbManager, false);
 
+    if(isset($_POST['records-limit'])){
+        $_SESSION['records-limit'] = $_POST['records-limit'];
+    }
+
+    $limit = isset($_SESSION['records-limit']) ? $_SESSION['records-limit'] : 5;
+    $page = (isset($_GET['page']) && is_numeric($_GET['page']) ) ? $_GET['page'] : 1;
+    $paginationStart = ($page - 1) * $limit;
+    // Find all messages for current user
+    $users = $dbManager->findAllUsers($paginationStart, $limit);
+
+    $allUsers = $dbManager->countAllUsers();
+
+    // Calculate total pages
+    $totoalPages = ceil($allUsers[0]['count(id)'] / $limit);
+
+    // Prev + Next
+    $prev = $page - 1;
+    $next = $page + 1;
+
     // If the user is not an admin he cannot see the page
     if (!IdentityManagement::isPageAllowed($_SESSION['role'])) {
         $dbManager->closeConnection();
@@ -13,7 +32,7 @@ try{
         exit();
     }
 
-    $users = $dbManager->findAllUsers();
+
     $dbManager->closeConnection();
 } catch(PDOException $e) {
     die('Connection to the database failed');
@@ -32,9 +51,10 @@ try{
         <title>User Management</title>
     </head>
     <body>
-    <?php require_once('fragments/NavBar.php')?>
+    <?php require_once('fragments/navBar.php')?>
 
         <div class="container">
+            <?php require_once('fragments/paginationSelector.php') ?>
             <div class="card border-0 shadow my-5">
                 <div>
                     <table class="table messages">
@@ -66,6 +86,7 @@ EOT;
                         ?>
                         </tbody>
                     </table>
+                    <?php require_once('fragments/pagination.php'); ?>
                 </div>
             </div>
             <a href="user/addUser.php" class="btn btn-primary mt-4">Add user</a>

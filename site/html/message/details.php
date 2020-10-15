@@ -46,7 +46,7 @@ try {
         <title>View message</title>
     </head>
     <body>
-        <?php require_once('../fragments/NavBar.php');?>
+        <?php require_once('../fragments/navBar.php');?>
         <form action="details.php" method="get">
             <div class="container">
                 <div class="row justify-content-center">

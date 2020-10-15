@@ -47,10 +47,11 @@ try {
     <title>Profile</title>
 </head>
     <body>
-    <?php require_once('fragments/NavBar.php')?>
+    <?php require_once('fragments/navBar.php')?>
 
     <form action="profile.php" method="post">
         <div class="container">
+            <?php require_once('fragments/paginationSelector.php') ?>
             <div class="row justify-content-center">
                 <div class="col-12 col-md-8 col-lg-8 col-xl-6">
                     <?php

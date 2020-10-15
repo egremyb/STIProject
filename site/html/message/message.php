@@ -59,7 +59,7 @@ try {
         <title>New message</title>
     </head>
     <body>
-        <?php require_once('../fragments/NavBar.php');?>
+        <?php require_once('../fragments/navBar.php');?>
         <form action="message.php" method="post">
             <div class="container">
                 <div class="row justify-content-center">
