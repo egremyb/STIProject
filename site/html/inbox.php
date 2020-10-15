@@ -20,7 +20,7 @@ try {
     $allMessages = $dbManager->countAllMessagesForUser($_SESSION['id']);
 
     // Calculate total pages
-    $totoalPages = ceil($allMessages[0]['count(m.id)'] / $limit);
+    $totalPages = ceil($allMessages[0]['count(m.id)'] / $limit);
 
     // Prev + Next
     $prev = $page - 1;

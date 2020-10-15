@@ -19,7 +19,7 @@ try{
     $allUsers = $dbManager->countAllUsers();
 
     // Calculate total pages
-    $totoalPages = ceil($allUsers[0]['count(id)'] / $limit);
+    $totalPages = ceil($allUsers[0]['count(id)'] / $limit);
 
     // Prev + Next
     $prev = $page - 1;
