@@ -28,7 +28,7 @@ Here are the available functions once you sign in to the site:
 
 ## Structure
 
-Down below you will find the structure of the repository and an explanation for the folders.
+Down below you will find the structure of the repository and an explanation for the different folders.
 
   ```
   images
@@ -71,7 +71,10 @@ Here is the explanation on how to install the site:
   `git clone git@github.com:Naludrag/STIProject.git`
 
 2. Run the script `run-docker.sh`. This script will build a docker image named `sti_project_naludrag` and will run it on the `8080` port of your localhost.
-So, you can access the site by typing `http://localhost:8080` on our web browser.
+
+If you are on Windows please use the script `run-docker.bat` because the OS does not recognize the `\r` in the sh file.
+
+After the script ended, you can access the site by typing `http://localhost:8080` on our web browser.
 
 After that you will see a login page you can use the following credentials:
 
