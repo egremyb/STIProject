@@ -122,6 +122,8 @@ class dbManager
      * @param $recipient int the recipient of the message
      */
     function addMessage($subject, $body, $sender, $recipient){
+        // Set the timezone because default is UTC
+        date_default_timezone_set('Europe/Zurich');
         // Prepare the date in the right format to write in the database
         $date = new DateTime();
         $date = $date->format('d-m-Y H:i:s');
