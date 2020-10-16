@@ -1,7 +1,16 @@
 <?php
 
+/**
+ * Class Utils class for generic methods
+ */
 class Utils
 {
+    /**
+     * @param $records_limit int limit set by the user for the row per pages
+     * @param $get_page int the number of the page to show
+     * @return array containing $limit set the limit of the row per page, $page get the number of the page,
+     * $paginationStart the index of the value that start the pagination
+     */
     public static function initPagination($records_limit, $get_page){
         // If the users choose a record limit we set it a session variable for the entire site
         if(isset($records_limit)){
