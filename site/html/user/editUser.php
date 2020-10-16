@@ -12,10 +12,12 @@ try {
         exit();
     }
 
+    // Check if id is sent with a get
     if (isset($_GET['id'])) {
         $id = $_GET['id'];
     }
 
+    // If the user desired to change th user
     if (isset($_POST['saveUser'])) {
         if (isset($_POST['id']) && isset($_POST['role'])) {
             $id = $_POST['id'];
@@ -43,6 +45,7 @@ try {
         }
     }
 
+    // If the id is not set the page will die
     if (empty($id)) {
         $dbManager->closeConnection();
         die('Invalid arguments passed to the page');

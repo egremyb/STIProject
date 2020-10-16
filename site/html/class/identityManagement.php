@@ -11,7 +11,7 @@ class IdentityManagement
 
     /**
      * @param $role String that contains the role of a user
-     * @return bool true if it has admin rights and the page accessed is not an admin page false otherwise
+     * @return bool true if it has admin rights or if the page accessed is not an admin page false otherwise
      */
     public static function isPageAllowed($role) {
         $page = basename($_SERVER['PHP_SELF']);
@@ -45,7 +45,7 @@ class IdentityManagement
 
     /**
      * @param $session array contain the session of the user
-     * @param $dbManager dbManager Object dbManager to user a function
+     * @param $dbManager dbManager Object dbManager to use a function
      */
     public static function isSessionValid($session, $dbManager) {
         $user = $dbManager->findUserByID($session['id']);

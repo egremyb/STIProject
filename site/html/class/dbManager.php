@@ -33,7 +33,7 @@ class dbManager
 
     /**
      * @param $id int id of the message who must be found
-     * @return false|PDOStatement boolean false it the message isn't found or a an object that represents the message
+     * @return false|PDOStatement boolean false it the message isn't found or an object that represents the message
      * required with username for sender and recipient
      */
     function findMessageByID($id){
@@ -80,9 +80,9 @@ class dbManager
     }
 
     /**
-     * @param $userId int id of the user the messages are addressed to
-     * @param $paginationStart int tell from where to start for the pagination
-     * @param $limit int indicates the limit for the pagination
+     * @param $userId int id of the user for which the messages are addressed to
+     * @param $paginationStart int index of the first message of the pagination
+     * @param $limit int indicates the limit for the pagination last message
      * @return false|array boolean false if the connection with the DB isn't set
      *                            or an array that contains all the messages
      */
@@ -101,7 +101,7 @@ class dbManager
     }
 
     /**
-     * @param $userId int id of the user the messages are addressed to
+     * @param $userId int id of the user for which the messages are addressed to
      * @return false|array boolean false if the connection with the DB isn't set
      *                            or an array that contains the number of messages of a user
      */
@@ -140,8 +140,8 @@ class dbManager
     }
 
     /**
-     * @param $paginationStart int tell from where to start for the pagination
-     * @param $limit int indicates the limit for the pagination
+     * @param $paginationStart int index of the first user of the pagination
+     * @param $limit int indicates the limit for the pagination last user
      * @return false|array boolean false if the connection with the DB isn't set
      *                            or an array that contains all the users
      */

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Class Utils class for generic methods
+ * Class Utils class for methods for page generation
  */
 class Utils
 {
