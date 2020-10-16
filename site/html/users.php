@@ -64,7 +64,8 @@ try{
                         <tbody>
                         <?php
                         foreach($users as $user) {
-                            echo <<<EOT
+                            if($user['id'] != $_SESSION['id']) {
+                                echo <<<EOT
                                 <tr>
                                      <th>{$user['username']}</th>
                                      <th>{$user['isValid']}</th>
@@ -78,6 +79,7 @@ try{
                                 </tr>
 EOT;
                             }
+                        }
                         ?>
                         </tbody>
                     </table>
