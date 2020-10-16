@@ -1,5 +1,7 @@
 # STI Project 1
 
+Authors: Robin Müller & Stéphane Teixeira Carvalho 
+
 ## Table of Content
 - [Introduction](#Introduction)  
 - [Structure of repository](#Structure)
