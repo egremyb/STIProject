@@ -17,14 +17,14 @@ You cannot access the site if you are not logged in. If you try to access other 
 
 Here are the available functions once you sign in to the site :
 
-- As a collaborator you can do:
+- As a collaborator you can :
     - See the email sent to you with the following information : the date when the email was sent, the sender and the subject.
     - Next to the information of the email you can choose if you want to delete it, see its details (See more information such as the sender and the body) or reply to it
     - Write a new message by filling a form were you specify the sender the subject and the description.
     - Change your password
-- As an Administrator you can do:
-    - Same actions as a collaborator
-    - Add, delete, update a user.
+- As an Administrator you can :
+    - Do the same actions as a collaborator
+    - Add, delete and update a user.
 
 ## Structure
 
@@ -45,21 +45,21 @@ Down below you will find the structure of the repository and an explanation for 
   run-dcoker.sh
   ```
 
-The folder `images` will contain the different images for the manual of the application.
+The folder `images` will contain the different images for the user manual of the application.
 
 The folder `site` is the main folder it contains all the files for the application.
 
-Inside it you will see two folders :
+Inside it, you will see two folders :
 
  - `databases` : this is the folder containing the sqlite file that is the database used for the application.
  - `html` : this folder contains all the php files that form the website.
 
 At the root of the folder `html`, you will find the pages that are shown in the navigation bar of the website.
 
-The folder `class`, inside `html`, contains all the classes used on the website.  
+The folder `class`, inside `html`, contains all the classes used on the different pages of the website.  
 The folder `fragments` contains the html content represented in multiple pages for instance in our case the navigation bar.
 
-The folder `message` contains the php pages used to manage a message(view/delete/respond).  
+The folder `message` contains the php pages used to manage a message(new/view/delete/respond).  
 The folder `user` contains all the pages used to manage a user account(add/delete/edit).
 
 
@@ -71,6 +71,7 @@ Here is the explanation on how to install the site :
   `git clone git@github.com:Naludrag/STIProject.git`
 
 2. Run the script `run-docker.sh`. This script will build a docker image named `sti_project_naludrag` and will run it on the `8080` port of your localhost.
+So, you can access the site by typing `http://localhost:8080` on our web browser.
 
 After that you will see a login page you can use the following credentials :
 
@@ -83,13 +84,14 @@ After that you will see a login page you can use the following credentials :
 
 ### Login Page
 
-This is the first that you will be able to see after the installation.
+This is the first page that you will be able to see after the installation.
 
 Here is the result of the page :
 
 ![Login Page](./images/Login.PNG)
 
-This page is pretty simple you have to enter your username password. If your user is not found or your password is incorrect you will have an error message. If not you will see the inbox of your account.
+This page is pretty simple you have to enter your credentials (username + password).  
+If your user is not found or your password is incorrect you will have an error message. If not you will see the inbox of your account.
 
 
 ### Inbox page
@@ -99,9 +101,9 @@ Once we're logged in, we arrive on the inbox page. This page, displayed below, c
 ![Inbox Page](./images/Inbox.png)
 
 For each email, the date it was sent, the sender and the subject are displayed. A user can do the following actions on an email, in the same order as the picture:
-- Respond to it
-- Delete it
-- Show its details
+- Respond to it(arrow pointing to the left)
+- Delete it(bin icon)
+- Show its details(arrow pointing to the up right)
 
 
 ### New message page
@@ -155,7 +157,9 @@ The profile page is used to change the password of the current user, it also dis
 
 A password policy has been set and it is the following : 
 
-Password should contain at least 8 characters, one upper case letter, one number, and one special character
+Password should contain at least 8 characters, one upper case letter, one number, and one special character.
+
+So if your new password does not respect the password policy a message will be shown.
 
 ### User management page
 This page can only be accessed by administrators:  
