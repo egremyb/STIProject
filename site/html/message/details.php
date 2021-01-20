@@ -1,7 +1,6 @@
 <?php
 require_once('../class/dbManager.php');
 require_once('../class/identityManagement.php');
-
 try {
     // Connection to the database
     $dbManager = new dbManager();
@@ -15,19 +14,15 @@ try {
     }
 
     // If the delete button has been clicked we delete the message from the database
-    if (isset($_GET['btnDelete'])) {
+    if (isset($_GET['btnDelete']) && isset($_POST['token']) &&
+        IdentityManagement::isTokenValid($_SESSION, $_POST['token'])) {
         $dbManager->deleteMessage($_GET['id']);
         $dbManager->closeConnection();
         // When a messaged is deleted the user is send to the inbox
         header('Location: ../inbox.php');
     } else {
         // Search for the desired message to show
-        $message = $dbManager->findMessageByID($_GET['id']);
-        // If no message is found we redirect to the inbox
-        if ($message == false) {
-            $dbManager->closeConnection();
-            header('Location: ../inbox.php');
-        }
+        $message = IdentityManagement::isMessageAccessAllowed($_SESSION, $_GET['id'], $dbManager);
     }
 } catch(PDOException $e) {
     die('Connection to the database failed');
@@ -48,6 +43,7 @@ try {
     <body>
         <?php require_once('../fragments/navBar.php');?>
         <form action="details.php" method="get">
+            <input type="hidden" readonly name="token" value="<?php echo $_SESSION['token'] ?>" />
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-12 col-md-8 col-lg-8 col-xl-6">

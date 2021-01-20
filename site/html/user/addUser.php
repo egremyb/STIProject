@@ -14,13 +14,14 @@ try {
     }
 
     // To not lose all the information added to the form
-    $username = $_POST['username'];
+    $username = Utils::filterString($_POST['username']);
     $password = $_POST['password'];
     $isValid = isset($_POST['isValid']);
     $selectedRole = $_POST['role'];
 
 
-    if (isset($_POST['addUser'])) {
+    if (isset($_POST['addUser']) && isset($_POST['token']) &&
+        IdentityManagement::isTokenValid($_SESSION, $_POST['token'])) {
         // If the form is filled
         if (!empty($username) && !empty($password) && !empty($selectedRole)) {
             // Save user details
@@ -29,13 +30,17 @@ try {
             if ($foundUser) {
                 $error = "Username not available";
             } else {
-                if(IdentityManagement::isPasswordStrong($password)) {
-                    $dbManager->addUser($username, $password, $isValid, $selectedRole);
-                    $dbManager->closeConnection();
-                    header('Location: ../users.php');
-                    exit();
+                if ($selectedRole != 0 || $selectedRole != 1) {
+                    $error = "Invalid role selected";
                 } else {
-                    $error = 'Password should contain at least 8 characters, one upper case letter, one number, and one special character';
+                    if(IdentityManagement::isPasswordStrong($password)) {
+                        $dbManager->addUser($username, $password, $isValid, $selectedRole);
+                        $dbManager->closeConnection();
+                        header('Location: ../users.php');
+                        exit();
+                    } else {
+                        $error = 'Password should contain at least 8 characters, one upper case letter, one number, and one special character';
+                    }
                 }
             }
         } else {
@@ -78,6 +83,7 @@ try {
                                  </div>';
                         }
                         ?>
+                        <input type="hidden" readonly name="token" value="<?php echo $_SESSION['token'] ?>" />
                         <div class="row align-items-center">
                             <div class="col mt-4">
                                 <label for="username">Username</label>

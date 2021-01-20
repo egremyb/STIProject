@@ -30,4 +30,13 @@ class Utils
             "page" => $page,
             "paginationStart" => $paginationStart);
     }
+
+    /**
+     * @param $str String input to filter
+     * @return false String if successful or false (boolean instance)
+     */
+    public static function filterString($str) {
+        return $str == null ? false : filter_var($str, FILTER_SANITIZE_SPECIAL_CHARS,
+            array('flags' => FILTER_FLAG_STRIP_LOW | FILTER_FLAG_ENCODE_HIGH));
+    }
 }

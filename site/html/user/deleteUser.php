@@ -12,7 +12,8 @@ try {
         exit();
     }
     // Check if the value id is passed to the page
-    if (!isset($_GET['id']) or empty($_GET['id'])) {
+    if (!isset($_GET['id']) or empty($_GET['id']) &&
+        isset($_POST['token']) && IdentityManagement::isTokenValid($_SESSION, $_POST['token'])) {
         $dbManager->closeConnection();
         die('Invalid arguments passed to the page');
     }
