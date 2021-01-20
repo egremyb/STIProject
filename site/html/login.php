@@ -50,7 +50,10 @@ catch(PDOException $e) {
     // Print PDOException message
     echo $e->getMessage();
 }
-
+/**
+ * https://www.knowband.com/blog/tips/integrate-google-recaptcha-php/
+ * @return false
+ */
 function checkCaptcha() {
     if (isset($_POST['g-recaptcha-response']) && !empty($_POST['g-recaptcha-response'])) {
         $secret = '6LcobTQaAAAAAPvqMtl3r2HUIEIttYFzSa_VQk2B';
