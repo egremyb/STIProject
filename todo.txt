@@ -9,6 +9,6 @@
 ++ implement an input filtering process in utils class
 + use the previous implemented method to filter all input in new messages (subject & content) and new user (username)
 + add role verification in addUser & editUser files
-- https? to prevent clear traffic
-+ add CSRF tokens
++ add CSRF tokens (automatically update itself after each use)
 + prevent login brute-force -> use captcha
++ use POST method for most form (except pagination)
