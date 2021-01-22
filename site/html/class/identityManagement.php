@@ -74,16 +74,30 @@ class IdentityManagement
     }
 
     /**
-     * @param $session array contain the session of the user
-     * @param $token string received from the post request
+     * Generate and return a CSRF token.
+     * @return false|string|null
      */
-    public static function isTokenValid($session, $token)  {
+    public static function generateNewSessionToken() {
+        return password_hash(openssl_random_pseudo_bytes(32), PASSWORD_BCRYPT);
+    }
+
+    /**
+     * Compare the the session's token with the provided one and update session's token.
+     * @param &$session array is the user's session
+     * @param $token string received from the post request
+     * @return bool
+     */
+    public static function isTokenValid(&$session, $token)  {
         if ($session == null || $token == null) {
             return false;
         }
-        // https://stackoverflow.com/questions/32671908/hash-equals-alternative-for-php-5-5-9
+        // Get both token to compare
         $str1 = $session['token'];
         $str2 = $token;
+        // Generate new token
+        $session['token'] = IdentityManagement::generateNewSessionToken();
+        // Compare token
+        // https://stackoverflow.com/questions/32671908/hash-equals-alternative-for-php-5-5-9
         if(strlen($str1) != strlen($str2)) {
             return false;
         } else {

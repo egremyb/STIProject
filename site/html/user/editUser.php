@@ -13,8 +13,8 @@ try {
     }
 
     // Check if id is sent with a get
-    if (isset($_GET['id'])) {
-        $id = $_GET['id'];
+    if (isset($_POST['id'])) {
+        $id = $_POST['id'];
     }
 
     // If the user desired to change th user

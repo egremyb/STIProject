@@ -1,6 +1,7 @@
 <?php
 require_once('../class/dbManager.php');
 require_once('../class/identityManagement.php');
+require_once('../class/utils.php');
 try {
     $dbManager = new dbManager();
     session_start();
@@ -19,7 +20,6 @@ try {
     $isValid = isset($_POST['isValid']);
     $selectedRole = $_POST['role'];
 
-
     if (isset($_POST['addUser']) && isset($_POST['token']) &&
         IdentityManagement::isTokenValid($_SESSION, $_POST['token'])) {
         // If the form is filled
@@ -30,7 +30,7 @@ try {
             if ($foundUser) {
                 $error = "Username not available";
             } else {
-                if ($selectedRole != 0 || $selectedRole != 1) {
+                if ($selectedRole != 1 && $selectedRole != 2) {
                     $error = "Invalid role selected";
                 } else {
                     if(IdentityManagement::isPasswordStrong($password)) {

@@ -9,8 +9,8 @@ try {
     IdentityManagement::isSessionValid($_SESSION, $dbManager);
 
     // If an id is received it means that a reply is desired by the user
-    if (isset($_GET['id'])) {
-        $message = IdentityManagement::isMessageAccessAllowed($_SESSION, $_GET['id'], $dbManager);
+    if (isset($_POST['id'])) {
+        $message = IdentityManagement::isMessageAccessAllowed($_SESSION, $_POST['id'], $dbManager);
         // Create a reply content
         $replyContent = "\n\n\n\n" .
                         "---------- Original message ----------\n" .

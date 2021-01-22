@@ -8,21 +8,22 @@ try {
     IdentityManagement::isSessionValid($_SESSION, $dbManager);
 
     // If no id is passed to the page an error is sent
-    if (!isset($_GET['id'])) {
+    if (!isset($_POST['id'])) {
         $dbManager->closeConnection();
         die('Invalid arguments passed to the page');
     }
 
     // If the delete button has been clicked we delete the message from the database
-    if (isset($_GET['btnDelete']) && isset($_POST['token']) &&
+    if (isset($_POST['btnDelete']) && isset($_POST['token']) &&
         IdentityManagement::isTokenValid($_SESSION, $_POST['token'])) {
-        $dbManager->deleteMessage($_GET['id']);
+
+        $dbManager->deleteMessage($_POST['id']);
         $dbManager->closeConnection();
         // When a messaged is deleted the user is send to the inbox
         header('Location: ../inbox.php');
     } else {
         // Search for the desired message to show
-        $message = IdentityManagement::isMessageAccessAllowed($_SESSION, $_GET['id'], $dbManager);
+        $message = IdentityManagement::isMessageAccessAllowed($_SESSION, $_POST['id'], $dbManager);
     }
 } catch(PDOException $e) {
     die('Connection to the database failed');
@@ -42,7 +43,7 @@ try {
     </head>
     <body>
         <?php require_once('../fragments/navBar.php');?>
-        <form action="details.php" method="get">
+        <form action="details.php" method="post">
             <input type="hidden" readonly name="token" value="<?php echo $_SESSION['token'] ?>" />
             <div class="container">
                 <div class="row justify-content-center">
@@ -87,7 +88,7 @@ try {
                             <div class="col">
                                 <?php
                                 // Depending on the action desired the buttons available will be different
-                                if(isset($_GET['deleteForm'])){
+                                if(isset($_POST['deleteForm'])){
                                     echo <<<EOT
                                         
                                         <button type="submit" class="btn btn-primary mt-4" name="btnDelete" value="yes">Delete</button>

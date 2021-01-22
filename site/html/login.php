@@ -1,10 +1,16 @@
 <!-- Login page for the website -->
 <?php
 require_once('class/dbManager.php');
+require_once('class/identityManagement.php');
+session_start();
+// Redirect user to inbox if already logged in
+if (isset($_SESSION['logon'])) {
+    header('Location: inbox.php');
+    die();
+}
 try {
     // Create the connection to the database
     $dbManager = new dbManager();
-
     // Check if the password is set and the username too
     if (isset($_POST['pass']) && isset($_POST['username'])) {
         // Invalid credentials by default
@@ -23,14 +29,11 @@ try {
                     if ($user['isValid'] !== 'yes') {
                         $error = "Account is not active";
                     } else {
-                        // If the user isn't already logged a new session will start
-                        if (!session_id())
-                            session_start();
                         // Set different Sessions values for the user
                         $_SESSION['logon'] = true;
                         $_SESSION['id'] = $user['id'];
                         $_SESSION['role'] = $dbManager->getRoleName($user['role']);
-                        $_SESSION['token'] = password_hash(openssl_random_pseudo_bytes(32), PASSWORD_BCRYPT);
+                        $_SESSION['token'] = IdentityManagement::generateNewSessionToken();
                         // Close the connection with the database
                         $dbManager->closeConnection();
                         // Go to the inbox
