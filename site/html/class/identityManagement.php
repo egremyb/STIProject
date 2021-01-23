@@ -82,7 +82,7 @@ class IdentityManagement
     }
 
     /**
-     * Compare the the session's token with the provided one and update session's token.
+     * Compare the session's token with the provided one and update session's token.
      * @param &$session array is the user's session
      * @param $token string received from the post request
      * @return bool
