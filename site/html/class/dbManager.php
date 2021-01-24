@@ -38,7 +38,7 @@ class dbManager
      */
     function findMessageByID($id){
         // Search for the desired message
-        $stmt = $this->file_db->prepare("SELECT m.id, m.date, m.subject, m.body, s.username as sender, r.username as recipient FROM messages AS m
+        $stmt = $this->file_db->prepare("SELECT m.id, m.date, m.subject, m.body, s.username as sender, r.id as recipientId, r.username as recipient FROM messages AS m
                 INNER JOIN Users AS s ON m.sender == s.id
                 INNER JOIN Users AS r ON m.recipient == r.id
                 WHERE m.id=:id");

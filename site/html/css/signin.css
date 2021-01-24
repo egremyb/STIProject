@@ -16,6 +16,7 @@
 
 .login-heading {
     font-weight: 300;
+    text-align: center;
 }
 
 .btn-login {
@@ -28,6 +29,13 @@
 .form-label-group {
     position: relative;
     margin-bottom: 1rem;
+}
+
+.g-recaptcha {
+    margin-bottom: 1rem;
+    margin-left: auto;
+    margin-right: auto;
+    width: min-content;
 }
 
 .form-label-group>input,

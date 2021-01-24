@@ -1,6 +1,7 @@
 <?php
 require_once('../class/dbManager.php');
 require_once('../class/identityManagement.php');
+require_once('../class/utils.php');
 try {
     // Connection to the database
     $dbManager = new dbManager;
@@ -8,31 +9,31 @@ try {
     IdentityManagement::isSessionValid($_SESSION, $dbManager);
 
     // If an id is received it means that a reply is desired by the user
-    if (isset($_GET['id'])) {
-        $message = $dbManager->findMessageByID($_GET['id']);
-        // If the message exists we creat a reply content
-        if($message != false){
-            $replyContent = "\n\n\n\n" .
-                "---------- Original message ----------\n" .
-                "From: ${message['sender']}\n" .
-                "Sent: ${message['date']}\n" .
-                "To: ${message['recipient']}\n" .
-                "Subject: ${message['subject']}\n" . $message['body'];
-        } else {
-            $dbManager->closeConnection();
-            die('Invalid arguments passed to the page');
-        }
+    if (isset($_POST['id'])) {
+        $message = IdentityManagement::isMessageAccessAllowed($_SESSION, $_POST['id'], $dbManager);
+        // Create a reply content
+        $replyContent = "\n\n\n\n" .
+                        "---------- Original message ----------\n" .
+                        "From: ${message['sender']}\n" .
+                        "Sent: ${message['date']}\n" .
+                        "To: ${message['recipient']}\n" .
+                        "Subject: ${message['subject']}\n" . $message['body'];
     }
 
     // Check that the form is completed
-    if (isset($_POST['recipient']) && isset($_POST['subject']) && isset($_POST['body'])) {
+    if (isset($_POST['recipient']) && isset($_POST['subject']) && isset($_POST['body']) &&
+        isset($_POST['token']) && IdentityManagement::isTokenValid($_SESSION, $_POST['token'])){
+        // Filter subject and body inputs
+        $post_subject = Utils::filterString($_POST['subject']);
+        $post_body    = Utils::filterString($_POST['body']);
+        // Find user
         $user = $dbManager->findUserByID($_SESSION['id']);
         // Check that the session has a valid id
         if ($user != NULL) {
             $recipient = $dbManager->findUserByUsername($_POST['recipient']);
             // Check if the recipient wrote in the form exists in the database.
             if ($recipient != false) {
-                $dbManager->addMessage($_POST['subject'], $_POST['body'], $_SESSION['id'], $recipient['id']);
+                $dbManager->addMessage($post_subject, $post_body, $_SESSION['id'], $recipient['id']);
                 $dbManager->closeConnection();
                 header('Location: ../inbox.php');
             } else {
@@ -44,7 +45,7 @@ try {
         }
     }
 } catch(PDOException $e) {
-    die('Connection to the database failed');
+    die('Connection to the database failed' . $e);
 }
 ?>
 <!DOCTYPE html>
@@ -61,6 +62,7 @@ try {
     <body>
         <?php require_once('../fragments/navBar.php');?>
         <form action="message.php" method="post">
+            <input type="hidden" readonly name="token" value="<?php echo $_SESSION['token'] ?>" />
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-12 col-md-8 col-lg-8 col-xl-6">

@@ -41,6 +41,7 @@ try{
         <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link rel="stylesheet" href="css/common.css">
 
         <meta charset="UTF-8">
         <title>User Management</title>
@@ -72,8 +73,18 @@ try{
                                      <th>{$user['rolename']}</th>
                                      <th>
                                         <span class="actions">
-                                            <a href="user/editUser.php?id={$user['id']}"><span class="material-icons">edit</span></a>
-                                            <a href="user/deleteUser.php?id={$user['id']}"><span class="material-icons">delete</span></a>
+                                            <form action="user/editUser.php" method="post" class="inline">
+                                                <input hidden name="id" value="{$user['id']}">
+                                                <button class="btn-appearance-none">
+                                                    <span class="material-icons">edit</span>
+                                                </button>
+                                            </form>
+                                            <form action="user/deleteUser.php" method="post" class="inline">
+                                                <input hidden name="id" value="{$user['id']}">
+                                                <button class="btn-appearance-none">
+                                                    <span class="material-icons">delete</span>
+                                                </button>
+                                            </form>
                                         </span>
                                     </th>
                                 </tr>
@@ -91,7 +102,7 @@ EOT;
         <script>
             $(document).ready(function () {
                 $('#records-limit').change(function () {
-                    $('form').submit();
+                    $('#paginationForm').submit();
                 })
             });
         </script>

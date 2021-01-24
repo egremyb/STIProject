@@ -13,25 +13,31 @@ try {
     }
 
     // Check if id is sent with a get
-    if (isset($_GET['id'])) {
-        $id = $_GET['id'];
+    if (isset($_POST['id'])) {
+        $id = $_POST['id'];
     }
 
     // If the user desired to change th user
-    if (isset($_POST['saveUser'])) {
+    if (isset($_POST['saveUser']) && isset($_POST['token']) &&
+        IdentityManagement::isTokenValid($_SESSION, $_POST['token'])) {
         if (isset($_POST['id']) && isset($_POST['role'])) {
             $id = $_POST['id'];
 
             // If checkbox is checked, $_POST var is set
             $isValid = isset($_POST['isValid']);
 
-            // Save user details
-            // Save password if set
-            if (isset($_POST['password']) && !empty($_POST['password'])) {
-                if (IdentityManagement::isPasswordStrong($_POST['password'])) {
-                    $dbManager->saveUserPassword($id, $_POST['password']);
-                } else {
-                    $error = 'Password should contain at least 8 characters, one upper case letter, one number, and one special character';
+            // Check selected role
+            if ($_POST['role'] != 1 && $_POST['role'] != 2) {
+                $error = "Invalid role selected";
+            } else {
+                // Save user details
+                // Save password if set
+                if (isset($_POST['password']) && !empty($_POST['password'])) {
+                    if (IdentityManagement::isPasswordStrong($_POST['password'])) {
+                        $dbManager->saveUserPassword($id, $_POST['password']);
+                    } else {
+                        $error = 'Password should contain at least 8 characters, one upper case letter, one number, and one special character';
+                    }
                 }
             }
 
@@ -92,6 +98,7 @@ try {
                                  </div>';
                         }
                         ?>
+                        <input type="hidden" readonly name="token" value="<?php echo $_SESSION['token'] ?>" />
                         <input type="hidden" readonly name="id" value="<?php echo $user['id'] ?>" />
                         <div class="row align-items-center">
                             <div class="col mt-4">

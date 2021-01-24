@@ -35,6 +35,7 @@ catch(PDOException $e) {
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="css/common.css">
 
     <meta charset="UTF-8">
     <title>Inbox</title>
@@ -66,9 +67,25 @@ catch(PDOException $e) {
                          <th>{$msg['subject']}</th>
                          <th>
                             <span class="actions">
-                                <a href="../message/message.php?id={$msg['id']}"><span class="material-icons">reply</span></a>
-                                <a href="../message/details.php?id={$msg['id']}&deleteForm=yes"><span class="material-icons">delete</span></a>
-                                <a href="../message/details.php?id={$msg['id']}"><span class="material-icons">launch</span></a>
+                                <form action="../message/message.php" method="post" class="inline">
+                                    <input hidden name="id" value="{$msg['id']}">
+                                    <button class="btn-appearance-none">
+                                        <span class="material-icons">reply</span>
+                                    </button>
+                                </form>
+                                <form action="../message/details.php" method="post" class="inline">
+                                    <input hidden name="id" value="{$msg['id']}">
+                                    <input hidden name="deleteForm" value="yes">
+                                    <button class="btn-appearance-none">
+                                        <span class="material-icons">delete</span>
+                                    </button>
+                                </form>
+                                <form action="../message/details.php" method="post" class="inline">
+                                    <input hidden name="id" value="{$msg['id']}">
+                                    <button class="btn-appearance-none">
+                                        <span class="material-icons">launch</span>
+                                    </button>
+                                </form>
                             </span>
                         </th>
                     </tr>
@@ -83,7 +100,7 @@ EOT;
     <script>
         $(document).ready(function () {
             $('#records-limit').change(function () {
-                $('form').submit();
+                $('#paginationForm').submit();
             })
         });
     </script>

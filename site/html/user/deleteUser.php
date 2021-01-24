@@ -12,12 +12,13 @@ try {
         exit();
     }
     // Check if the value id is passed to the page
-    if (!isset($_GET['id']) or empty($_GET['id'])) {
+    if (!isset($_POST['id']) or empty($_POST['id']) &&
+        isset($_POST['token']) && IdentityManagement::isTokenValid($_SESSION, $_POST['token'])) {
         $dbManager->closeConnection();
         die('Invalid arguments passed to the page');
     }
 
-    $dbManager->deleteUser($_GET['id']);
+    $dbManager->deleteUser($_POST['id']);
 } catch(PDOException $e) {
     die('Connection to the database failed');
 }

@@ -4,7 +4,7 @@ $curPageName = substr($_SERVER["SCRIPT_NAME"],strrpos($_SERVER["SCRIPT_NAME"],"/
 ?>
 <!-- Select dropdown -->
 <div class="d-flex flex-row-reverse bd-highlight mb-3">
-    <form action="<?= $curPageName ?>" method="post">
+    <form id="paginationForm" action="<?= $curPageName ?>" method="post">
         <select name="records-limit" id="records-limit" class="custom-select">
             <option disabled selected>Number of data to show per page</option>
             <!-- Show the different option for the number of object to select-->

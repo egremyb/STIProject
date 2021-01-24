@@ -1,6 +1,7 @@
 <?php
 require_once('../class/dbManager.php');
 require_once('../class/identityManagement.php');
+require_once('../class/utils.php');
 try {
     $dbManager = new dbManager();
     session_start();
@@ -14,28 +15,31 @@ try {
     }
 
     // To not lose all the information added to the form
-    $username = $_POST['username'];
+    $username = Utils::filterString($_POST['username']);
     $password = $_POST['password'];
     $isValid = isset($_POST['isValid']);
-    $selectedRole = $_POST['role'];
 
-
-    if (isset($_POST['addUser'])) {
+    if (isset($_POST['addUser']) && isset($_POST['token']) &&
+        IdentityManagement::isTokenValid($_SESSION, $_POST['token'])) {
         // If the form is filled
-        if (!empty($username) && !empty($password) && !empty($selectedRole)) {
+        if (!empty($username) && !empty($password) && !empty($_POST['role'])) {
             // Save user details
             // The username has to be unique so if the user is found in the database show an error message
             $foundUser = $dbManager->findUserByUsername($username);
             if ($foundUser) {
                 $error = "Username not available";
             } else {
-                if(IdentityManagement::isPasswordStrong($password)) {
-                    $dbManager->addUser($username, $password, $isValid, $selectedRole);
-                    $dbManager->closeConnection();
-                    header('Location: ../users.php');
-                    exit();
+                if ($_POST['role'] != 1 && $_POST['role'] != 2) {
+                    $error = "Invalid role selected";
                 } else {
-                    $error = 'Password should contain at least 8 characters, one upper case letter, one number, and one special character';
+                    if(IdentityManagement::isPasswordStrong($password)) {
+                        $dbManager->addUser($username, $password, $isValid, $_POST['role']);
+                        $dbManager->closeConnection();
+                        header('Location: ../users.php');
+                        exit();
+                    } else {
+                        $error = 'Password should contain at least 8 characters, one upper case letter, one number, and one special character';
+                    }
                 }
             }
         } else {
@@ -78,6 +82,7 @@ try {
                                  </div>';
                         }
                         ?>
+                        <input type="hidden" readonly name="token" value="<?php echo $_SESSION['token'] ?>" />
                         <div class="row align-items-center">
                             <div class="col mt-4">
                                 <label for="username">Username</label>
