@@ -2,6 +2,13 @@
 <?php
 require_once('class/dbManager.php');
 require_once('class/identityManagement.php');
+$lifetime = 0;
+$path = '/';
+$samesite = 'strict';
+$domain = '';
+$secure = false;
+$httpOnly = true;
+session_set_cookie_params($lifetime, $path.'; samesite='.$samesite, $domain, $secure, $httpOnly);
 session_start();
 // Redirect user to inbox if already logged in
 if (isset($_SESSION['logon'])) {

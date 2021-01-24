@@ -15,7 +15,7 @@ As part of the STI course, we were asked to create a website that will simulate 
 
 For more information, such as the [project structure](https://github.com/Naludrag/STIProject#Structure) or the [user manual](https://github.com/Naludrag/STIProject#Usage), about the first project consisting of the basic implementation of the website, check out this [repository](https://github.com/Naludrag/STIProject).
 
-After having the website done, we came to fix the security vulnerabilities through a threats analysis and a security patch. Check out the report ([md](./report.md), [pdf](./report.pdf)) document for more information.
+After having the website done, we came to fix the security vulnerabilities through a threats analysis and a security patch. Check out the [report](./report.pdf) document for more information.
 
 ## <a id="install-run"></a>Installation/run
 To run the website without persistent data, use the following command.
