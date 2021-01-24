@@ -4,23 +4,25 @@ Fork from https://github.com/Naludrag/STIProject.
 
 ## Table of Content
 - [Introduction](#introduction)
-- [Installation/run](#installation)
+- [Installation/run](#install-run)
 - [Usage](#usage)
 	- [Credentials](#credentials)
 	- [Login Page](#login)
 	- [Database](#database)
 
 ## Introduction
-As part of the STI course, we were asked to create a website that will simulate a web email system using a database.
+As part of the STI course, we were asked to create a website that will simulate a web email system using a database without focusing on his security aspect.
 
 For more information, such as the [project structure](https://github.com/Naludrag/STIProject#Structure) or the [user manual](https://github.com/Naludrag/STIProject#Usage), about the first project consisting of the basic implementation of the website, check out this [repository](https://github.com/Naludrag/STIProject).
 
-## Installation/run
+After having the website done, we came to fix the security vulnerabilities through a threats analysis and a security patch. Check out the report ([md](./report.md), [pdf](./report.pdf)) document for more information.
+
+## <a id="install-run"></a>Installation/run
 To run the website without persistent data, use the following command.
 ```
 docker run -it -d -p 8080:80 --name sti_project2 b3cauda/sti_project2
 ```
-For persistent data, or to edit the website, follow the next steps.
+For a persistent database, or to edit the website, follow the next steps.
 ```
 # Clone the project where you want it to be
 git clone https://github.com/egremyb/STIProject.git
@@ -41,13 +43,9 @@ There are two default accounts with the provided SQLite database.
 
 ### <a id="login"></a>Login Page
 
-The first page you will see when accessing the website is the login page.
-
-The page has been updated to prevent brute-force attacks by using Google reCAPTCHA technology.
+The first page you will see when accessing the website is still the login page but it has been updated to prevent brute-force attacks using Google reCAPTCHAv2 technology.
 
 ![Login Page](./assets/login.PNG)
-
-Except for this, the page remains the same. Just do not forget to check the CAPTCHA before trying to log in.
 
 ### Database
 The SQLite database is accessible at the http://localhost:8080/phpliteadmin.php URL.
