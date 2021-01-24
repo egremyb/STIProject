@@ -27,7 +27,7 @@ try {
             $isValid = isset($_POST['isValid']);
 
             // Check selected role
-            if ($_POST['role'] != 0 || $_POST['role'] != 1) {
+            if ($_POST['role'] != 1 && $_POST['role'] != 2) {
                 $error = "Invalid role selected";
             } else {
                 // Save user details

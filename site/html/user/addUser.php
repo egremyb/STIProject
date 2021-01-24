@@ -18,23 +18,22 @@ try {
     $username = Utils::filterString($_POST['username']);
     $password = $_POST['password'];
     $isValid = isset($_POST['isValid']);
-    $selectedRole = $_POST['role'];
 
     if (isset($_POST['addUser']) && isset($_POST['token']) &&
         IdentityManagement::isTokenValid($_SESSION, $_POST['token'])) {
         // If the form is filled
-        if (!empty($username) && !empty($password) && !empty($selectedRole)) {
+        if (!empty($username) && !empty($password) && !empty($_POST['role'])) {
             // Save user details
             // The username has to be unique so if the user is found in the database show an error message
             $foundUser = $dbManager->findUserByUsername($username);
             if ($foundUser) {
                 $error = "Username not available";
             } else {
-                if ($selectedRole != 1 && $selectedRole != 2) {
+                if ($_POST['role'] != 1 && $_POST['role'] != 2) {
                     $error = "Invalid role selected";
                 } else {
                     if(IdentityManagement::isPasswordStrong($password)) {
-                        $dbManager->addUser($username, $password, $isValid, $selectedRole);
+                        $dbManager->addUser($username, $password, $isValid, $_POST['role']);
                         $dbManager->closeConnection();
                         header('Location: ../users.php');
                         exit();
